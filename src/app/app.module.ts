@@ -14,6 +14,10 @@ import { RegisterComponent } from './register/register.component';
 import { MenuComponent } from './menu/menu.component';
 import { AgencyComponent } from './agency/agency.component';
 
+import { AuthService } from './_services/auth.service';
+import { UserService } from './_services/user.service';
+import { AgencyService } from './_services/agency.service';
+
 
 @NgModule({
   declarations: [
@@ -33,7 +37,11 @@ import { AgencyComponent } from './agency/agency.component';
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    AuthService,
+    UserService,
+    AgencyService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
