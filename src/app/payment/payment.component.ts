@@ -13,7 +13,7 @@ import { FlightService } from 'src/app/_services/flight.service';
 export class PaymentComponent implements OnInit {
   elements: Elements;
   card: StripeElement;
-  stripeTest: FormGroup;
+  stripeForm: FormGroup;
   paymentInfo: any;
   result: any;
   flight: any
@@ -26,9 +26,15 @@ export class PaymentComponent implements OnInit {
 
   ngOnInit(): void {
   
-    this.flight = this.flightService.retrieveFlight();
-    // this.flight = { flightId: 5, source: 'EWR', destination: 'JFK', cost: 276.94, date: '2020-05-05', time: '06:00' }
-    this.paymentInfo = { ticketInfo: { flightId: 5, customerId: 16, amount: 27694 }, paymentMethodId: null }
+    const chosenFlight = history.state;
+    this.flight = { 
+      flightId: chosenFlight.flightId, 
+      source: chosenFlight.sourceAirport.airportCode, 
+      destination: chosenFlight.destinationAirport.airportCode, 
+      cost: chosenFlight.cost, 
+      date: chosenFlight.departureDate, 
+      time: chosenFlight.departureTime }
+    this.paymentInfo = { ticketInfo: { flightId: this.flight.flightId, customerId: 16, amount: this.flight.cost*100 }, paymentMethodId: null }
     this.stripeForm = this.fb.group({
         name: ['', [Validators.required],]
       });
@@ -59,7 +65,7 @@ export class PaymentComponent implements OnInit {
 
   pay() {
     console.log(this.card);
-    const name = this.stripeTest.get('name').value;
+    const name = this.stripeForm.get('name').value;
     const paymentInfo = this.paymentInfo;
     this.stripeService
       .createPaymentMethod('card', this.card, { billing_details: { name } })
