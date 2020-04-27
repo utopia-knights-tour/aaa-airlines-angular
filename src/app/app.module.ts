@@ -14,6 +14,7 @@ import { RegisterComponent } from './register/register.component';
 import { MenuComponent } from './menu/menu.component';
 import { AgencyComponent } from './agency/agency.component';
 import { FlightsComponent } from './flights/flights.component';
+import { CustomerComponent } from './customer/customer.component';
 
 import { AuthService } from './_services/auth.service';
 import { UserService } from './_services/user.service';
@@ -31,6 +32,7 @@ import { NgbDateFormatterService } from './_services/ngb-date-formatter.service'
     RegisterComponent,
     MenuComponent,
     AgencyComponent,
+    CustomerComponent,
     FlightsComponent
   ],
   imports: [

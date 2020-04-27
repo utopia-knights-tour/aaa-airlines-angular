@@ -78,8 +78,7 @@ export class RegisterComponent implements OnInit {
     }
 
     this.loading = true;
-    this.registerAgentForm.value.role = 'customer';
-    console.log(this.registerCustomerForm.value);
+    this.registerAgentForm.value.role = "customer";
     this.userService
       .register(this.registerCustomerForm.value)
       .pipe(first())
@@ -102,8 +101,7 @@ export class RegisterComponent implements OnInit {
     }
 
     this.loading = true;
-    this.registerAgentForm.value.role = 'agent';
-    console.log(this.registerAgentForm.value);
+    this.registerAgentForm.value.role = "agent";
     this.userService
       .register(this.registerAgentForm.value)
       .pipe(first())
