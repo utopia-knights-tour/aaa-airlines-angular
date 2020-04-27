@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AgencyService } from "../_services/agency.service";
-import { CustomerService } from "../_services/customer.service";
 
 @Component({
   selector: "app-agency",
@@ -25,7 +24,6 @@ export class AgencyComponent implements OnInit {
 
   constructor(
     private agencyService: AgencyService,
-    private customerService: CustomerService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
@@ -59,7 +57,7 @@ export class AgencyComponent implements OnInit {
     if (this.searchName) requestParams.push({ name: this.searchName });
     if (this.searchAddress) requestParams.push({ address: this.searchAddress });
     if (this.searchPhone) requestParams.push({ phone: this.searchPhone });
-    this.customerService.getCustomers(requestParams).subscribe(
+    this.agencyService.getCustomers(requestParams).subscribe(
       (data) => {
         this.loading = false;
         this.customers = data["customers"];

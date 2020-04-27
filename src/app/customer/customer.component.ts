@@ -1,13 +1,9 @@
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 
-import { AuthService } from "../_services/auth.service";
 import { CustomerService } from "../_services/customer.service";
 import { TicketService } from "../_services/ticket.service";
-import { PaymentService } from "../_services/payment.service";
-
-import { User } from "../_models/user";
 
 @Component({
   selector: "app-customer",
@@ -18,10 +14,9 @@ export class CustomerComponent implements OnInit {
   agencyId: number;
   customerId: number;
   private sub: any;
-  role: string;
 
   customer: any;
-  tickets: any;
+  tickets: [];
   ticketsCount: number;
   selectedTicket: number;
   private modalRef: NgbModalRef;
@@ -34,13 +29,10 @@ export class CustomerComponent implements OnInit {
   loading = false;
 
   constructor(
-    private authService: AuthService,
     private customerService: CustomerService,
     private ticketService: TicketService,
-    private paymentService: PaymentService,
     private modalService: NgbModal,
-    private route: ActivatedRoute,
-    private router: Router
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -48,7 +40,6 @@ export class CustomerComponent implements OnInit {
       this.agencyId = +params["agencyId"];
       this.customerId = +params["customerId"];
     });
-    this.role = this.authService.currentUserValue.role;
     this.getCustomerById(this.customerId);
     this.getTicketsByAgencyIdAndCustomerId(this.agencyId, this.customerId);
   }
@@ -71,63 +62,24 @@ export class CustomerComponent implements OnInit {
     let requestParams = [];
     if (this.page) requestParams.push({ page: this.page });
     if (this.pageSize) requestParams.push({ pagesize: this.pageSize });
-    console.log(this.role);
-    if (this.role == "counter") {
-      this.ticketService
-      .getTicketsByCustomerId(customerId, requestParams).subscribe(
-        (data) => {
-          this.loading = false;
-          this.tickets = data;
-          this.ticketsCount = this.tickets.length;
-          console.log(this.tickets);
-        },
-        (error) => {
-          this.loading = false;
-        }
-      );
-    } else if (this.role == "agent") {
-      this.ticketService
+    this.ticketService
       .getTicketsByAgencyIdAndCustomerId(agencyId, customerId, requestParams)
       .subscribe(
         (data) => {
           this.loading = false;
           this.tickets = data["tickets"];
           this.ticketsCount = data["ticketsCount"];
+          console.log(this.tickets);
         },
         (error) => {
           this.loading = false;
         }
       );
-    }
   }
 
-  bookFlight() {
-    console.log(this.authService.currentUserValue);
-    this.router.navigate(["/flights/customer", this.customerId]);
-  }
-
-  cancelReservation() {
-    console.log(this.customerId + " " + this.selectedTicket);
-    this.loading = true;
-    this.paymentService.cancelTicket(this.customerId, this.selectedTicket, this.agencyId || null)
-    .subscribe(
-      (data) => {
-        console.log(data);
-        this.loading = false;
-        this.modalRef.close();
-        this.getTicketsByAgencyIdAndCustomerId(this.agencyId, this.customerId);
-      },
-      (error) => {
-        console.log('err');
-        console.log(error);
-        this.loading = false;
-        this.modalRef.dismiss();
-      }
-    );
-  }
+  cancelReservation() {}
 
   open(content, id) {
-    console.log(id);
     this.selectedTicket = id;
     this.modalRef = this.modalService.open(content);
     this.modalRef.result.then(
