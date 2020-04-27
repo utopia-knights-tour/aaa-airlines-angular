@@ -1,18 +1,13 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { AgencyService } from "../_services/agency.service";
 import { CustomerService } from "../_services/customer.service";
 
 @Component({
-  selector: "app-agency",
-  templateUrl: "./agency.component.html",
-  styleUrls: ["./agency.component.css"],
+  selector: "app-counter",
+  templateUrl: "./counter.component.html",
+  styleUrls: ["./counter.component.css"],
 })
-export class AgencyComponent implements OnInit {
-  agencyId: number;
-  private sub: any;
-
-  agency: any;
+export class CounterComponent implements OnInit {
   customers: [];
   customersCount: number;
   searchName = "";
@@ -24,34 +19,16 @@ export class AgencyComponent implements OnInit {
   loading = false;
 
   constructor(
-    private agencyService: AgencyService,
     private customerService: CustomerService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.sub = this.route.params.subscribe((params) => {
-      this.agencyId = +params["agencyId"];
-    });
-    this.getAgencyById(this.agencyId);
-    this.getCustomers();
+    this.getCustomersForCounter();
   }
 
-  getAgencyById(id: number) {
-    this.loading = true;
-    this.agencyService.getAgencyById(1).subscribe(
-      (data) => {
-        this.loading = false;
-        this.agency = data;
-      },
-      (error) => {
-        this.loading = false;
-      }
-    );
-  }
-
-  getCustomers() {
+  getCustomersForCounter() {
     this.loading = true;
     let requestParams = [];
     if (this.page) requestParams.push({ page: this.page });
@@ -59,11 +36,11 @@ export class AgencyComponent implements OnInit {
     if (this.searchName) requestParams.push({ name: this.searchName });
     if (this.searchAddress) requestParams.push({ address: this.searchAddress });
     if (this.searchPhone) requestParams.push({ phone: this.searchPhone });
-    this.customerService.getCustomers(requestParams).subscribe(
+    this.customerService.getCustomersForCounter(requestParams).subscribe(
       (data) => {
         this.loading = false;
         this.customers = data["customers"];
-        this.customersCount = data["customersCount"];
+        this.customersCount = data["customers"].length;
       },
       (error) => {
         this.loading = false;
@@ -72,10 +49,11 @@ export class AgencyComponent implements OnInit {
   }
 
   getCustomerById(id: number) {
-    this.router.navigate(["/agency", this.agencyId, "customer", id]);
+    console.log(id);
+    this.router.navigate(["/counter/customer", id]);
   }
 
   changePage(event: Event) {
-    this.getCustomers();
+    this.getCustomersForCounter();
   }
 }

@@ -4,13 +4,11 @@ import { Routes, RouterModule } from "@angular/router";
 import { HomeComponent } from "./home/home.component";
 import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
-import { MenuComponent } from "./menu/menu.component";
+import { CounterComponent } from "./counter/counter.component";
 import { AgencyComponent } from "./agency/agency.component";
 import { CustomerComponent } from "./customer/customer.component";
-import { PaymentComponent } from './payment/payment.component';
-
-import { AuthGuard } from './_guards/auth.guard';
-import { FlightsComponent } from './flights/flights.component';
+import { PaymentComponent } from "./payment/payment.component";
+import { FlightsComponent } from "./flights/flights.component";
 
 const routes: Routes = [
   {
@@ -30,13 +28,16 @@ const routes: Routes = [
     component: RegisterComponent,
   },
   {
-    path: 'payment',
-    component: PaymentComponent
+    path: "payment",
+    component: PaymentComponent,
   },
   {
-    path: "menu",
-    component: MenuComponent,
-    canActivate: [AuthGuard],
+    path: "counter",
+    component: CounterComponent,
+  },
+  {
+    path: "counter/customer/:customerId",
+    component: CustomerComponent,
   },
   {
     path: "agency/:agencyId",
@@ -46,11 +47,15 @@ const routes: Routes = [
     path: "agency/:agencyId/customer/:customerId",
     component: CustomerComponent,
   },
-  { 
-    path: 'flights',
-    component: FlightsComponent
+  {
+    path: "flights",
+    component: FlightsComponent,
   },
-  { path: '**', redirectTo: '' }
+  {
+    path: "flights/customer/:customerId",
+    component: FlightsComponent,
+  },
+  { path: "**", redirectTo: "" },
 ];
 
 @NgModule({

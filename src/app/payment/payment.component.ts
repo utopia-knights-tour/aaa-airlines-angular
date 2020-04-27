@@ -25,8 +25,9 @@ export class PaymentComponent implements OnInit {
     private flightService : FlightService ) { }
 
   ngOnInit(): void {
-  
+
     const chosenFlight = history.state;
+    console.log(chosenFlight.customerId);
     this.flight = { 
       flightId: chosenFlight.flightId, 
       source: chosenFlight.sourceAirport.airportCode, 

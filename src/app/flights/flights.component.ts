@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from "@angular/router";
 import { AirportService } from '../_services/airport.service';
 import { Airport } from '../_models/airport';
 import { AuthService } from '../_services/auth.service';
@@ -14,6 +15,8 @@ import { NgbDateFormatterService } from '../_services/ngb-date-formatter.service
   styleUrls: ['./flights.component.css']
 })
 export class FlightsComponent implements OnInit {
+  private sub: any;
+  customerId: number;
 
   flightForm: FormGroup;
   airports: [Airport];
@@ -36,9 +39,14 @@ export class FlightsComponent implements OnInit {
     private flightService: FlightService,
     private authService: AuthService,
     private formBuilder: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router,
     private dateFormatter: NgbDateFormatterService) {}
 
   ngOnInit(): void {
+    this.sub = this.route.params.subscribe((params) => {
+      this.customerId = +params["customerId"];
+    });
       this.loading = true;
       //this.user = this.authService.currentUserValue;
       switch (this.user.role) {

@@ -32,14 +32,15 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
     this.getAllAgencies();
     this.registerCustomerForm = this.formBuilder.group({
-      name: ["", Validators.required],
-      address: ["", Validators.required],
-      phone: [
+      customerName: ["", Validators.required],
+      customerAddress: ["", Validators.required],
+      customerPhone: [
         "",
         [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")],
       ],
       email: ["", [Validators.required, Validators.email]],
       password: ["", [Validators.required, Validators.minLength(6)]],
+      role: ["", []]
     });
     this.registerAgentForm = this.formBuilder.group({
       agencyId: [null, Validators.required],
@@ -78,7 +79,7 @@ export class RegisterComponent implements OnInit {
     }
 
     this.loading = true;
-    this.registerAgentForm.value.role = "customer";
+    this.registerCustomerForm.value.role = "customer";
     this.userService
       .register(this.registerCustomerForm.value)
       .pipe(first())
