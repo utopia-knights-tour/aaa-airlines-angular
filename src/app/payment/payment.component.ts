@@ -75,7 +75,7 @@ export class PaymentComponent implements OnInit {
     const name = this.stripeForm.get('name').value;
     const paymentInfo = this.paymentInfo;
     this.stripeService
-      .createPaymentMethod('card', this.card, { billing_details: { name } })
+      .createPaymentMethod('card', this.card)
       .subscribe(result => {
         if (result.paymentMethod) {
           console.log(result.paymentMethod);
