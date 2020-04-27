@@ -5,6 +5,7 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { MenuComponent } from './menu/menu.component';
+import { PaymentComponent } from './app/payment/payment.component';
 
 import { AuthGuard } from './_guards/auth.guard';
 
@@ -24,6 +25,10 @@ const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent
+  },
+  {
+    path: 'payment',
+    component: PaymentComponent
   },
   {
     path: 'menu',
