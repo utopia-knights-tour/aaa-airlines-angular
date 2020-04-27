@@ -58,7 +58,7 @@ import { NgbDateFormatterService } from './_services/ngb-date-formatter.service'
     AuthService,
     UserService,
     AgencyService,
-    PaymentService
+    PaymentService,
     AirportService,
     FlightService,
     NgbDateFormatterService
