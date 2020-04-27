@@ -19,11 +19,11 @@
     </div>
   </div>
 </div>
-<form novalidate (ngSubmit)="pay()" [formGroup]="stripeTest">
+<form novalidate (ngSubmit)="pay()" [formGroup]="stripeForm">
   <input type="text" formControlName="name" placeholder="Jane Doe">
-  <span *ngIf="stripeTest.controls.name.invalid && stripeTest.get('name').touched"
+  <span *ngIf="stripeForm.controls.name.invalid && stripeForm.get('name').touched"
     class="alert alert-danger">  
-    <span *ngIf="stripeTest.controls.name.errors.required">
+    <span *ngIf="stripeForm.controls.name.errors.required">
       This Field is Required.
     </span>
   </span>

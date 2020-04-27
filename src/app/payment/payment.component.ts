@@ -29,7 +29,7 @@ export class PaymentComponent implements OnInit {
     this.flight = this.flightService.retrieveFlight();
     // this.flight = { flightId: 5, source: 'EWR', destination: 'JFK', cost: 276.94, date: '2020-05-05', time: '06:00' }
     this.paymentInfo = { ticketInfo: { flightId: 5, customerId: 16, amount: 27694 }, paymentMethodId: null }
-    this.stripeTest = this.fb.group({
+    this.stripeForm = this.fb.group({
         name: ['', [Validators.required],]
       });
     this.stripeService.elements()
