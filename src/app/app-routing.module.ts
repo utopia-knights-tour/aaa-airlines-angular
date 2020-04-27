@@ -8,7 +8,8 @@ import { MenuComponent } from "./menu/menu.component";
 import { AgencyComponent } from "./agency/agency.component";
 import { CustomerComponent } from "./customer/customer.component";
 
-import { AuthGuard } from "./_guards/auth.guard";
+import { AuthGuard } from './_guards/auth.guard';
+import { FlightsComponent } from './flights/flights.component';
 
 const routes: Routes = [
   {
@@ -40,7 +41,11 @@ const routes: Routes = [
     path: "agency/:agencyId/customer/:customerId",
     component: CustomerComponent,
   },
-  { path: "*", redirectTo: "" },
+  { 
+    path: 'flights',
+    component: FlightsComponent
+  },
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({
