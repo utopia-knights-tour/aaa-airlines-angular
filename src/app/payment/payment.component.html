@@ -7,13 +7,10 @@
           Flight {{ flight.flightId }}
         </div>
         <div class="card-text">
-          {{ flight.date }} {{ flight.departureTime }}-{{ flight.arrivalTime }} UTC
+          {{ flight.date }} {{ flight.time }} UTC
         </div>
         <div class="card-text">
-          <p class="font-weight-bold d-inline h5">
-            total : ${{ flight.cost }}
-          </p>
-          
+          total: ${{ flight.cost }}
         </div>
         <div class="card-text">
           

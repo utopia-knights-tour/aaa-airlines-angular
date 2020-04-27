@@ -13,9 +13,6 @@
       </div>
     </div>
   </div>
-  <button class="btn btn-primary" (click)="bookFlight()">
-    Book Flight for Customer
-  </button>
   <h2>Tickets</h2>
   <div>
     <table class="table table-striped">
@@ -28,46 +25,21 @@
       </thead>
       <tbody>
         <tr *ngFor="let ticket of tickets">
+          <td class="align-middle">{{ ticket.id }}</td>
           <td class="align-middle">
-            {{ role == "counter" ? ticket.ticketId : ticket.id }}
-          </td>
-          <td class="align-middle">
-            {{
-              role == "counter"
-                ? ticket.flight.departureDate
-                : ticket.flight.departureDate.day +
-                  "/" +
-                  ticket.flight.departureDate.month +
-                  "/" +
-                  ticket.flight.departureDate.year
-            }}
-            {{
-              role == "counter"
-                ? ticket.flight.departureTime
-                : ("0" + ticket.flight.departureTime.hour).slice(-2) +
-                  ":" +
-                  ("0" + ticket.flight.departureTime.minute).slice(-2)
+            {{ ticket.flight.departureDate.day }}/{{
+              ticket.flight.departureDate.month
+            }}/{{ ticket.flight.departureDate.year }}
+            {{ ("0" + ticket.flight.departureTime.hour).slice(-2) }}:{{
+              ("0" + ticket.flight.departureTime.minute).slice(-2)
             }}
           </td>
+          <td class="align-middle">{{ ticket.flight.sourceAirport.name }}</td>
           <td class="align-middle">
-            {{
-              role == "counter"
-                ? ticket.flight.sourceAirport.airportName
-                : ticket.flight.sourceAirport.name
-            }}
+            {{ ticket.flight.destinationAirport.name }}
           </td>
           <td class="align-middle">
-            {{
-              role == "counter"
-                ? ticket.flight.destinationAirport.airportName
-                : ticket.flight.destinationAirport.name
-            }}
-          </td>
-          <td class="align-middle">
-            <button
-              class="btn btn-primary"
-              (click)="open(cancelModal, ticket.ticketId || ticket.id)"
-            >
+            <button class="btn btn-primary" (click)="open(cancelModal, ticket.id)">
               Cancel Reservation
             </button>
           </td>
@@ -98,9 +70,8 @@
           </div>
           <div class="modal-body">
             <span
-              >Are you sure you want to cancel reservation for ticket #{{
-                selectedTicket
-              }}?</span
+              >Are you sure you want to cancel reservation for ticket #
+              {{ selectedTicket }}?</span
             >
           </div>
           <div class="modal-footer">
