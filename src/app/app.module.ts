@@ -17,6 +17,7 @@ import { AgencyComponent } from './agency/agency.component';
 import { AuthService } from './_services/auth.service';
 import { UserService } from './_services/user.service';
 import { AgencyService } from './_services/agency.service';
+import { CustomerComponent } from './customer/customer.component';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { AgencyService } from './_services/agency.service';
     LoginComponent,
     RegisterComponent,
     MenuComponent,
-    AgencyComponent
+    AgencyComponent,
+    CustomerComponent
   ],
   imports: [
     BrowserModule,
