@@ -121,4 +121,8 @@ export class FlightsComponent implements OnInit {
     }
     return { invalidDate: true };
   }
+
+  routeData(flight : Flight) {
+    this.flightService.storeFlight(flight);
+  }
 }

@@ -1,8 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { StripeService, Elements, Element as StripeElement } from "ngx-stripe";
+import { ActivatedRoute } from "@angular/router";
 
 import { PaymentService } from 'src/app/_services/payment.service';
+import { FlightService } from 'src/app/_services/flight.service';
 @Component({
   selector: 'app-payment',
   templateUrl: './payment.component.html',
@@ -14,18 +16,22 @@ export class PaymentComponent implements OnInit {
   stripeTest: FormGroup;
   paymentInfo: any;
   result: any;
-  flight: any;
+  flight: any
 
   constructor(private fb: FormBuilder,
     private stripeService: StripeService,
-    private paymentService: PaymentService) { }
+    private paymentService: PaymentService,
+    private route: ActivatedRoute,
+    private flightService : FlightService ) { }
 
   ngOnInit(): void {
-    this.flight = { flightId: 5, source: 'EWR', destination: 'JFK', cost: 276.94, date: '2020-05-05', time: '06:00'}
+  
+    this.flight = this.flightService.retrieveFlight();
+    // this.flight = { flightId: 5, source: 'EWR', destination: 'JFK', cost: 276.94, date: '2020-05-05', time: '06:00' }
     this.paymentInfo = { ticketInfo: { flightId: 5, customerId: 16, amount: 27694 }, paymentMethodId: null }
     this.stripeTest = this.fb.group({
-      name: ['', [Validators.required],]
-    });
+        name: ['', [Validators.required],]
+      });
     this.stripeService.elements()
       .subscribe(elements => {
         this.elements = elements;
