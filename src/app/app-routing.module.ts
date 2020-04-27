@@ -7,7 +7,7 @@ import { RegisterComponent } from "./register/register.component";
 import { MenuComponent } from "./menu/menu.component";
 import { AgencyComponent } from "./agency/agency.component";
 import { CustomerComponent } from "./customer/customer.component";
-import { PaymentComponent } from './app/payment/payment.component';
+import { PaymentComponent } from './payment/payment.component';
 
 import { AuthGuard } from './_guards/auth.guard';
 import { FlightsComponent } from './flights/flights.component';

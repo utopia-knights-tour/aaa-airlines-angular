@@ -14,7 +14,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { MenuComponent } from './menu/menu.component';
 import { AgencyComponent } from './agency/agency.component';
-import { PaymentComponent } from './app/payment/payment.component';
+import { PaymentComponent } from './payment/payment.component';
 import { environment } from 'src/environments/environment';
 import { PaymentService } from './_services/payment.service';
 
