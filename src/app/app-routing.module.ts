@@ -9,6 +9,7 @@ import { PaymentComponent } from './app/payment/payment.component';
 import { AgencyComponent } from './agency/agency.component';
 
 import { AuthGuard } from './_guards/auth.guard';
+import { FlightsComponent } from './flights/flights.component';
 
 const routes: Routes = [
   {
@@ -39,6 +40,10 @@ const routes: Routes = [
   {
     path: 'agency',
     component: AgencyComponent
+  },
+  {
+    path: 'flights',
+    component: FlightsComponent
   },
   { path: '**', redirectTo: '' }
 ];

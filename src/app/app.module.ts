@@ -14,15 +14,21 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { MenuComponent } from './menu/menu.component';
 import { AgencyComponent } from './agency/agency.component';
+<<<<<<< HEAD
 import { PaymentComponent } from './app/payment/payment.component';
 import { environment } from 'src/environments/environment';
 import { PaymentService } from './_services/payment.service';
 
+=======
+import { FlightsComponent } from './flights/flights.component';
+>>>>>>> flightsComponent
 
 import { AuthService } from './_services/auth.service';
 import { UserService } from './_services/user.service';
 import { AgencyService } from './_services/agency.service';
-
+import { AirportService } from './_services/airport.service';
+import { FlightService } from './_services/flight.service';
+import { NgbDateFormatterService } from './_services/ngb-date-formatter.service';
 
 @NgModule({
   declarations: [
@@ -33,7 +39,11 @@ import { AgencyService } from './_services/agency.service';
     RegisterComponent,
     MenuComponent,
     AgencyComponent,
+<<<<<<< HEAD
     PaymentComponent
+=======
+    FlightsComponent
+>>>>>>> flightsComponent
   ],
   imports: [
     BrowserModule,
@@ -49,6 +59,9 @@ import { AgencyService } from './_services/agency.service';
     UserService,
     AgencyService,
     PaymentService
+    AirportService,
+    FlightService,
+    NgbDateFormatterService
   ],
   bootstrap: [AppComponent]
 })
