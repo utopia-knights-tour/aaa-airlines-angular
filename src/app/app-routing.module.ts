@@ -1,47 +1,52 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { NgModule } from "@angular/core";
+import { Routes, RouterModule } from "@angular/router";
 
-import { HomeComponent } from './home/home.component';
-import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
-import { MenuComponent } from './menu/menu.component';
+import { HomeComponent } from "./home/home.component";
+import { LoginComponent } from "./login/login.component";
+import { RegisterComponent } from "./register/register.component";
+import { MenuComponent } from "./menu/menu.component";
+import { AgencyComponent } from "./agency/agency.component";
+import { CustomerComponent } from "./customer/customer.component";
 import { PaymentComponent } from './app/payment/payment.component';
-import { AgencyComponent } from './agency/agency.component';
 
 import { AuthGuard } from './_guards/auth.guard';
 import { FlightsComponent } from './flights/flights.component';
 
 const routes: Routes = [
   {
-    path: '',
-    component: HomeComponent
+    path: "",
+    component: HomeComponent,
   },
   {
-    path: 'home',
-    component: HomeComponent
+    path: "home",
+    component: HomeComponent,
   },
   {
-    path: 'login',
-    component: LoginComponent
+    path: "login",
+    component: LoginComponent,
   },
   {
-    path: 'register',
-    component: RegisterComponent
+    path: "register",
+    component: RegisterComponent,
   },
   {
     path: 'payment',
     component: PaymentComponent
   },
   {
-    path: 'menu',
+    path: "menu",
     component: MenuComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
   },
   {
-    path: 'agency',
-    component: AgencyComponent
+    path: "agency/:agencyId",
+    component: AgencyComponent,
   },
   {
+    path: "agency/:agencyId/customer/:customerId",
+    component: CustomerComponent,
+  },
+  { 
     path: 'flights',
     component: FlightsComponent
   },
@@ -50,6 +55,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

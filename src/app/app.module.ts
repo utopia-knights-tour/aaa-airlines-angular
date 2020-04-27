@@ -19,6 +19,7 @@ import { environment } from 'src/environments/environment';
 import { PaymentService } from './_services/payment.service';
 
 import { FlightsComponent } from './flights/flights.component';
+import { CustomerComponent } from './customer/customer.component';
 
 import { AuthService } from './_services/auth.service';
 import { UserService } from './_services/user.service';
@@ -37,6 +38,7 @@ import { NgbDateFormatterService } from './_services/ngb-date-formatter.service'
     MenuComponent,
     AgencyComponent,
     PaymentComponent,
+    CustomerComponent,
     FlightsComponent
   ],
   imports: [
