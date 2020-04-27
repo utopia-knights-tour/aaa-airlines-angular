@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import '@angular/localize/init';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxStripeModule } from 'ngx-stripe';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -13,6 +14,10 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { MenuComponent } from './menu/menu.component';
 import { AgencyComponent } from './agency/agency.component';
+import { PaymentComponent } from './payment/payment.component';
+import { environment } from 'src/environments/environment';
+import { PaymentService } from './_services/payment.service';
+
 import { FlightsComponent } from './flights/flights.component';
 import { CustomerComponent } from './customer/customer.component';
 
@@ -32,6 +37,7 @@ import { NgbDateFormatterService } from './_services/ngb-date-formatter.service'
     RegisterComponent,
     MenuComponent,
     AgencyComponent,
+    PaymentComponent,
     CustomerComponent,
     FlightsComponent
   ],
@@ -41,12 +47,14 @@ import { NgbDateFormatterService } from './_services/ngb-date-formatter.service'
     HttpClientModule,
     NgbModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxStripeModule.forRoot(environment.PUBLISHABLE_STRIPE_KEY),
   ],
   providers: [
     AuthService,
     UserService,
     AgencyService,
+    PaymentService,
     AirportService,
     FlightService,
     NgbDateFormatterService
