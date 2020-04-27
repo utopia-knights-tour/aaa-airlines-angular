@@ -122,5 +122,8 @@
       }
     }
   },
-  "defaultProject": "aaa-airlines"
+  "defaultProject": "aaa-airlines",
+  "cli": {
+    "analytics": false
+  }
 }
