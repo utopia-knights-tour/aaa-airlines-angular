@@ -6,6 +6,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { MenuComponent } from './menu/menu.component';
 import { PaymentComponent } from './app/payment/payment.component';
+import { AgencyComponent } from './agency/agency.component';
 
 import { AuthGuard } from './_guards/auth.guard';
 
@@ -34,6 +35,10 @@ const routes: Routes = [
     path: 'menu',
     component: MenuComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'agency',
+    component: AgencyComponent
   },
   { path: '**', redirectTo: '' }
 ];

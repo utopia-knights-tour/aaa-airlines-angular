@@ -19,6 +19,10 @@ import { environment } from 'src/environments/environment';
 import { PaymentService } from './_services/payment.service';
 
 
+import { AuthService } from './_services/auth.service';
+import { UserService } from './_services/user.service';
+import { AgencyService } from './_services/agency.service';
+
 
 @NgModule({
   declarations: [
@@ -40,7 +44,12 @@ import { PaymentService } from './_services/payment.service';
     ReactiveFormsModule,
     NgxStripeModule.forRoot(environment.PUBLISHABLE_STRIPE_KEY),
   ],
-  providers: [PaymentService],
+  providers: [
+    AuthService,
+    UserService,
+    AgencyService,
+    PaymentService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
