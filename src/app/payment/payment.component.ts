@@ -4,6 +4,7 @@ import { StripeService, Elements, Element as StripeElement } from "ngx-stripe";
 import { ActivatedRoute, Router } from "@angular/router";
 
 import { PaymentService } from 'src/app/_services/payment.service';
+import { AuthService} from 'src/app/_services/auth.service'
 
 @Component({
   selector: 'app-payment',
@@ -21,13 +22,17 @@ export class PaymentComponent implements OnInit {
   constructor(private fb: FormBuilder,
     private stripeService: StripeService,
     private paymentService: PaymentService,
+    private authService: AuthService,
     private router: Router,
  ) { }
 
   ngOnInit(): void {
-  
-    const chosenFlight = history.state;
-    console.log(chosenFlight)
+    console.log(history.state);
+    const { agencyId } = this.authService.currentUserValue;
+
+
+    const { customerId, flight : chosenFlight} = history.state;
+ 
     this.flight = { 
       flightId: chosenFlight.flightId, 
       source: chosenFlight.sourceAirport.airportCode, 
@@ -36,7 +41,7 @@ export class PaymentComponent implements OnInit {
       date: chosenFlight.departureDate, 
       departureTime: chosenFlight.departureTime,
       arrivalTime: chosenFlight.arrivalTime }
-    this.paymentInfo = { ticketInfo: { flightId: this.flight.flightId, customerId: 16, amount: this.flight.cost*100 }, paymentMethodId: null }
+    this.paymentInfo = { ticketInfo: { flightId: this.flight.flightId, customerId, agencyId, amount: this.flight.cost*100 }, paymentMethodId: null }
     this.stripeForm = this.fb.group({
         name: ['', [Validators.required],]
       });
@@ -90,7 +95,7 @@ export class PaymentComponent implements OnInit {
   }
 
   clickCancel() {
-    this.paymentService.cancelTicket(16, 143)
+    this.paymentService.cancelTicket(16,null,143)
       .subscribe(result => {
         console.log(result);
         this.result = JSON.stringify(result);

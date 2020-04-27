@@ -12,7 +12,6 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-import { MenuComponent } from './menu/menu.component';
 import { AgencyComponent } from './agency/agency.component';
 import { PaymentComponent } from './payment/payment.component';
 import { environment } from 'src/environments/environment';
@@ -27,6 +26,7 @@ import { AgencyService } from './_services/agency.service';
 import { AirportService } from './_services/airport.service';
 import { FlightService } from './_services/flight.service';
 import { NgbDateFormatterService } from './_services/ngb-date-formatter.service';
+import { CounterComponent } from './counter/counter.component';
 
 @NgModule({
   declarations: [
@@ -35,11 +35,11 @@ import { NgbDateFormatterService } from './_services/ngb-date-formatter.service'
     HomeComponent,
     LoginComponent,
     RegisterComponent,
-    MenuComponent,
     AgencyComponent,
     PaymentComponent,
     CustomerComponent,
-    FlightsComponent
+    FlightsComponent,
+    CounterComponent
   ],
   imports: [
     BrowserModule,
