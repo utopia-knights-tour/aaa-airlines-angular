@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { StripeService, Elements, Element as StripeElement } from "ngx-stripe";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 
 import { PaymentService } from 'src/app/_services/payment.service';
-import { FlightService } from 'src/app/_services/flight.service';
+import { AuthService} from 'src/app/_services/auth.service'
+
 @Component({
   selector: 'app-payment',
   templateUrl: './payment.component.html',
@@ -21,20 +22,26 @@ export class PaymentComponent implements OnInit {
   constructor(private fb: FormBuilder,
     private stripeService: StripeService,
     private paymentService: PaymentService,
-    private route: ActivatedRoute,
-    private flightService : FlightService ) { }
+    private authService: AuthService,
+    private router: Router,
+ ) { }
 
   ngOnInit(): void {
-  
-    const chosenFlight = history.state;
+    console.log(history.state);
+    const { agencyId } = this.authService.currentUserValue;
+
+
+    const { customerId, flight : chosenFlight} = history.state;
+ 
     this.flight = { 
       flightId: chosenFlight.flightId, 
       source: chosenFlight.sourceAirport.airportCode, 
       destination: chosenFlight.destinationAirport.airportCode, 
       cost: chosenFlight.cost, 
       date: chosenFlight.departureDate, 
-      time: chosenFlight.departureTime }
-    this.paymentInfo = { ticketInfo: { flightId: this.flight.flightId, customerId: 16, amount: this.flight.cost*100 }, paymentMethodId: null }
+      departureTime: chosenFlight.departureTime,
+      arrivalTime: chosenFlight.arrivalTime }
+    this.paymentInfo = { ticketInfo: { flightId: this.flight.flightId, customerId, agencyId, amount: this.flight.cost*100 }, paymentMethodId: null }
     this.stripeForm = this.fb.group({
         name: ['', [Validators.required],]
       });
@@ -77,6 +84,7 @@ export class PaymentComponent implements OnInit {
             .subscribe(result => {
               console.log(result);
               this.result = 'PAYMENT SUCCEDED';
+              
             }, err => {
               console.log(err);
               this.result = 'PAYMENT FAILED';
@@ -87,7 +95,7 @@ export class PaymentComponent implements OnInit {
   }
 
   clickCancel() {
-    this.paymentService.cancelTicket(16, 143)
+    this.paymentService.cancelTicket(16,null,143)
       .subscribe(result => {
         console.log(result);
         this.result = JSON.stringify(result);

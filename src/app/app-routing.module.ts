@@ -4,13 +4,16 @@ import { Routes, RouterModule } from "@angular/router";
 import { HomeComponent } from "./home/home.component";
 import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
-import { MenuComponent } from "./menu/menu.component";
+import { CounterComponent } from "./counter/counter.component";
 import { AgencyComponent } from "./agency/agency.component";
 import { CustomerComponent } from "./customer/customer.component";
-import { PaymentComponent } from './payment/payment.component';
+import { PaymentComponent } from "./payment/payment.component";
+import { FlightsComponent } from "./flights/flights.component";
 
-import { AuthGuard } from './_guards/auth.guard';
-import { FlightsComponent } from './flights/flights.component';
+import { AuthGuard } from "./_guards/auth.guard";
+import { CounterGuard } from "./_guards/counter.guard";
+import { AgencyGuard } from "./_guards/agency.guard";
+
 
 const routes: Routes = [
   {
@@ -30,27 +33,41 @@ const routes: Routes = [
     component: RegisterComponent,
   },
   {
-    path: 'payment',
-    component: PaymentComponent
+    path: "flights",
+    canActivate: [AuthGuard],
+    component: FlightsComponent,
   },
   {
-    path: "menu",
-    component: MenuComponent,
+    path: "flights/customer/:customerId",
     canActivate: [AuthGuard],
+    component: FlightsComponent,
+  },
+  {
+    path: "payment",
+    canActivate: [AuthGuard],
+    component: PaymentComponent,
+  },
+  {
+    path: "counter",
+    canActivate: [AuthGuard, CounterGuard],
+    component: CounterComponent,
+  },
+  {
+    path: "counter/customer/:customerId",
+    canActivate: [AuthGuard, CounterGuard],
+    component: CustomerComponent,
   },
   {
     path: "agency/:agencyId",
+    canActivate: [AuthGuard, AgencyGuard],
     component: AgencyComponent,
   },
   {
     path: "agency/:agencyId/customer/:customerId",
+    canActivate: [AuthGuard, AgencyGuard],
     component: CustomerComponent,
   },
-  { 
-    path: 'flights',
-    component: FlightsComponent
-  },
-  { path: '**', redirectTo: '' }
+  { path: "**", redirectTo: "/login" },
 ];
 
 @NgModule({
