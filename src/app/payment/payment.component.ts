@@ -22,7 +22,7 @@ export class PaymentComponent implements OnInit {
   agencyId: number;
   customerId: number;
   redirects: any;
-  role: any = 'agent';
+  role: string;
 
   constructor(private fb: FormBuilder,
     private stripeService: StripeService,
@@ -34,6 +34,7 @@ export class PaymentComponent implements OnInit {
   ngOnInit(): void {
     console.log(history.state);
     ({ agencyId: this.agencyId } = this.authService.currentUserValue);
+    ({ role: this.role} = this.authService.currentUserValue);
     // customerId get from localstorage, path, query?
     ({ customerId: this.customerId } = history.state);
     const { flight: chosenFlight } = history.state;
