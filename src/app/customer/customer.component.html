@@ -29,44 +29,22 @@
       <tbody>
         <tr *ngFor="let ticket of tickets">
           <td class="align-middle">
-            {{ role == "counter" ? ticket.ticketId : ticket.id }}
+            {{ ticket.ticketId }}
           </td>
           <td class="align-middle">
-            {{
-              role == "counter"
-                ? ticket.flight.departureDate
-                : ticket.flight.departureDate.day +
-                  "/" +
-                  ticket.flight.departureDate.month +
-                  "/" +
-                  ticket.flight.departureDate.year
-            }}
-            {{
-              role == "counter"
-                ? ticket.flight.departureTime
-                : ("0" + ticket.flight.departureTime.hour).slice(-2) +
-                  ":" +
-                  ("0" + ticket.flight.departureTime.minute).slice(-2)
-            }}
+            {{ ticket.flight.departureDate }}
+            {{ ticket.flight.departureTime }}
           </td>
           <td class="align-middle">
-            {{
-              role == "counter"
-                ? ticket.flight.sourceAirport.airportName
-                : ticket.flight.sourceAirport.name
-            }}
+            {{ ticket.flight.sourceAirport.airportName }}
           </td>
           <td class="align-middle">
-            {{
-              role == "counter"
-                ? ticket.flight.destinationAirport.airportName
-                : ticket.flight.destinationAirport.name
-            }}
+            {{ ticket.flight.destinationAirport.airportName }}
           </td>
           <td class="align-middle">
             <button
               class="btn btn-primary"
-              (click)="open(cancelModal, ticket.ticketId || ticket.id)"
+              (click)="open(cancelModal, ticket.ticketId)"
             >
               Cancel Reservation
             </button>

@@ -10,6 +10,11 @@ import { CustomerComponent } from "./customer/customer.component";
 import { PaymentComponent } from "./payment/payment.component";
 import { FlightsComponent } from "./flights/flights.component";
 
+import { AuthGuard } from "./_guards/auth.guard";
+import { CounterGuard } from "./_guards/counter.guard";
+import { AgencyGuard } from "./_guards/agency.guard";
+
+
 const routes: Routes = [
   {
     path: "",
@@ -28,34 +33,41 @@ const routes: Routes = [
     component: RegisterComponent,
   },
   {
-    path: "payment",
-    component: PaymentComponent,
-  },
-  {
-    path: "counter",
-    component: CounterComponent,
-  },
-  {
-    path: "counter/customer/:customerId",
-    component: CustomerComponent,
-  },
-  {
-    path: "agency/:agencyId",
-    component: AgencyComponent,
-  },
-  {
-    path: "agency/:agencyId/customer/:customerId",
-    component: CustomerComponent,
-  },
-  {
     path: "flights",
+    canActivate: [AuthGuard],
     component: FlightsComponent,
   },
   {
     path: "flights/customer/:customerId",
+    canActivate: [AuthGuard],
     component: FlightsComponent,
   },
-  { path: "**", redirectTo: "" },
+  {
+    path: "payment",
+    canActivate: [AuthGuard],
+    component: PaymentComponent,
+  },
+  {
+    path: "counter",
+    canActivate: [AuthGuard, CounterGuard],
+    component: CounterComponent,
+  },
+  {
+    path: "counter/customer/:customerId",
+    canActivate: [AuthGuard, CounterGuard],
+    component: CustomerComponent,
+  },
+  {
+    path: "agency/:agencyId",
+    canActivate: [AuthGuard, AgencyGuard],
+    component: AgencyComponent,
+  },
+  {
+    path: "agency/:agencyId/customer/:customerId",
+    canActivate: [AuthGuard, AgencyGuard],
+    component: CustomerComponent,
+  },
+  { path: "**", redirectTo: "/login" },
 ];
 
 @NgModule({

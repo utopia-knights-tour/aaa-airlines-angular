@@ -9,7 +9,7 @@
         id="searchName"
         placeholder="John Smith"
         [(ngModel)]="searchName"
-        (ngModelChange)="getCustomers()"
+        (ngModelChange)="getCustomersForCounter()"
       />
     </div>
   </div>
@@ -23,7 +23,7 @@
           id="searchAddress"
           placeholder="123 Oak Creek Lane"
           [(ngModel)]="searchAddress"
-          (ngModelChange)="getCustomers()"
+          (ngModelChange)="getCustomersForCounter()"
         />
       </div>
     </div>
@@ -37,7 +37,7 @@
             id="searchPhone"
             placeholder="1234567890"
             [(ngModel)]="searchPhone"
-            (ngModelChange)="getCustomers()"
+            (ngModelChange)="getCustomersForCounter()"
           />
         </div>
       </div>

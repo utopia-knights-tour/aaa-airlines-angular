@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import '@angular/localize/init';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -27,6 +27,8 @@ import { AirportService } from './_services/airport.service';
 import { FlightService } from './_services/flight.service';
 import { NgbDateFormatterService } from './_services/ngb-date-formatter.service';
 import { CounterComponent } from './counter/counter.component';
+
+import { JwtInterceptor } from './_helpers/jwt.interceptor';
 
 @NgModule({
   declarations: [
@@ -57,7 +59,8 @@ import { CounterComponent } from './counter/counter.component';
     PaymentService,
     AirportService,
     FlightService,
-    NgbDateFormatterService
+    NgbDateFormatterService,
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })
