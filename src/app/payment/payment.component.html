@@ -2,39 +2,30 @@
   <div class="card">
     <div class="card-body">
       <div class="card-block">
-        <h5 class="card-title"> {{ flight.source }} - {{ flight.destination}}</h5>
+        <h5 class="card-title"> {{ flight.sourceAirport }} - {{ flight.destinationAirport}}</h5>
         <div class="card-text">
           Flight {{ flight.flightId }}
         </div>
         <div class="card-text">
-          {{ flight.date }} {{ flight.departureTime }}-{{ flight.arrivalTime }} UTC
+          {{ flight.departureDate }} {{ flight.departureTime }}-{{ flight.arrivalTime }} UTC
         </div>
         <div class="card-text">
           <p class="font-weight-bold d-inline h5">
             total : ${{ flight.cost }}
           </p>
-          
+
         </div>
         <div class="card-text">
-          
+
         </div>
       </div>
     </div>
   </div>
 </div>
-<form novalidate (ngSubmit)="pay()" [formGroup]="stripeForm">
-  <input type="text" formControlName="name" placeholder="Jane Doe">
-  <span *ngIf="stripeForm.controls.name.invalid && stripeForm.get('name').touched"
-    class="alert alert-danger">  
-    <span *ngIf="stripeForm.controls.name.errors.required">
-      This Field is Required.
-    </span>
-  </span>
-    
+<form novalidate (ngSubmit)="pay()">
   <div id="card-element" class="field"></div>
   <button class="btn btn-primary" type="submit">
     PAY
   </button>
-  </form>
+</form>
 <div id="result" *ngIf="result">{{ result }}</div>
-<!-- <div><button (click)="clickCancel()">CANCEL TICKET TEST</button></div> -->

@@ -9,5 +9,5 @@ export class Flight {
   departureDate: string;
   arrivalDate: string;
   cost: number;
-  seatsAvailable: number;
+  seatsAvailable?: number;
 }
