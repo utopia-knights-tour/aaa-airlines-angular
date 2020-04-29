@@ -1,18 +1,44 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
 
-import { AuthService } from '../_services/auth.service';
+import { AuthService } from "../_services/auth.service";
 
 @Component({
-  selector: 'app-navbar',
-  templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.css']
+  selector: "app-navbar",
+  templateUrl: "./navbar.component.html",
+  styleUrls: ["./navbar.component.css"],
 })
 export class NavbarComponent implements OnInit {
+  constructor(private authService: AuthService, private router: Router) {}
 
-  constructor(private authService: AuthService) { }
+  ngOnInit() {}
 
-  loggedIn = this.authService.isLoggedIn;
+  home() {
+    let route = ["/"];
+    if (
+      this.authService.currentUserValue &&
+      this.authService.currentUserValue.role
+    ) {
+      switch (this.authService.currentUserValue.role) {
+        case "customer":
+          route = ["/flights"];
+          break;
+        case "counter":
+          route = ["/counter"];
+          break;
+        case "agent":
+          route = ["/agency", this.authService.currentUserValue.agencyId];
+          break;
+      }
+    }
+    this.router.navigate(route);
+  }
 
-  ngOnInit() {
+  loggedIn() {
+    return this.authService.currentUserValue;
+  }
+
+  logout() {
+    this.authService.logout();
   }
 }

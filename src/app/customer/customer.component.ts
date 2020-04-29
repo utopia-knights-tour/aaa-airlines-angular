@@ -71,7 +71,6 @@ export class CustomerComponent implements OnInit {
     let requestParams = [];
     if (this.page) requestParams.push({ page: this.page });
     if (this.pageSize) requestParams.push({ pagesize: this.pageSize });
-    console.log(this.role);
     if (this.role == "counter") {
       this.ticketService
       .getTicketsByCustomerId(customerId, requestParams).subscribe(
