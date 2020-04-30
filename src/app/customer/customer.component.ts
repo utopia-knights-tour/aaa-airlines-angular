@@ -8,6 +8,7 @@ import { TicketService } from "../_services/ticket.service";
 import { PaymentService } from "../_services/payment.service";
 
 import { User } from "../_models/user";
+import { StoreService } from '../_services/store.service';
 
 @Component({
   selector: "app-customer",
@@ -38,16 +39,14 @@ export class CustomerComponent implements OnInit {
     private customerService: CustomerService,
     private ticketService: TicketService,
     private paymentService: PaymentService,
+    private storeService: StoreService,
     private modalService: NgbModal,
     private route: ActivatedRoute,
     private router: Router
   ) {}
 
   ngOnInit() {
-    this.sub = this.route.params.subscribe((params) => {
-      this.agencyId = +params["agencyId"];
-      this.customerId = +params["customerId"];
-    });
+    ({agencyId: this.agencyId, customerId: this.customerId} = this.storeService.getStore());
     this.role = this.authService.currentUserValue.role;
     this.getCustomerById(this.customerId);
     this.getTicketsByAgencyIdAndCustomerId(this.agencyId, this.customerId);
@@ -102,7 +101,7 @@ export class CustomerComponent implements OnInit {
 
   bookFlight() {
     console.log(this.authService.currentUserValue);
-    this.router.navigate(["/flights/customer", this.customerId]);
+    this.router.navigate(["/flights"]);
   }
 
   cancelReservation() {

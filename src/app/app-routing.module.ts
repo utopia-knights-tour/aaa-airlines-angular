@@ -38,11 +38,6 @@ const routes: Routes = [
     component: FlightsComponent,
   },
   {
-    path: "flights/customer/:customerId",
-    canActivate: [AuthGuard],
-    component: FlightsComponent,
-  },
-  {
     path: "payment",
     canActivate: [AuthGuard],
     component: PaymentComponent,
@@ -53,17 +48,17 @@ const routes: Routes = [
     component: CounterComponent,
   },
   {
-    path: "counter/customer/:customerId",
+    path: "counter/customer",
     canActivate: [AuthGuard, CounterGuard],
     component: CustomerComponent,
   },
   {
-    path: "agency/:agencyId",
+    path: "agency",
     canActivate: [AuthGuard, AgencyGuard],
     component: AgencyComponent,
   },
   {
-    path: "agency/:agencyId/customer/:customerId",
+    path: "agency/customer",
     canActivate: [AuthGuard, AgencyGuard],
     component: CustomerComponent,
   },

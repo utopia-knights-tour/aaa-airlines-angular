@@ -44,11 +44,9 @@ export class FlightsComponent implements OnInit {
     private dateFormatter: NgbDateFormatterService) {}
 
   ngOnInit(): void {
-    this.sub = this.route.params.subscribe((params) => {
-      this.customerId = +params["customerId"];
-    });
+   
       this.loading = true;
-      //this.user = this.authService.currentUserValue;
+      this.user = this.authService.currentUserValue;
       switch (this.user.role) {
         case "counter": {
           this.airportService.getAirportsForCounter().subscribe((airports: [Airport]) => {

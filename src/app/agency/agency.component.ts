@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AgencyService } from "../_services/agency.service";
 import { CustomerService } from "../_services/customer.service";
+import { StoreService } from '../_services/store.service';
 
 @Component({
   selector: "app-agency",
@@ -26,21 +27,21 @@ export class AgencyComponent implements OnInit {
   constructor(
     private agencyService: AgencyService,
     private customerService: CustomerService,
+    private storeService: StoreService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.sub = this.route.params.subscribe((params) => {
-      this.agencyId = +params["agencyId"];
-    });
+   
+    ({ agencyId: this.agencyId } = this.storeService.getStore())
     this.getAgencyById(this.agencyId);
     this.getCustomers();
   }
 
   getAgencyById(id: number) {
     this.loading = true;
-    this.agencyService.getAgencyById(1).subscribe(
+    this.agencyService.getAgencyById(id).subscribe(
       (data) => {
         this.loading = false;
         this.agency = data;
@@ -72,7 +73,8 @@ export class AgencyComponent implements OnInit {
   }
 
   getCustomerById(id: number) {
-    this.router.navigate(["/agency", this.agencyId, "customer", id]);
+    this.storeService.setStore({...this.storeService.getStore(), customerId: id});
+    this.router.navigate(["/agency/customer"]);
   }
 
   changePage(event: Event) {

@@ -29,6 +29,7 @@ import { NgbDateFormatterService } from './_services/ngb-date-formatter.service'
 import { CounterComponent } from './counter/counter.component';
 
 import { JwtInterceptor } from './_helpers/jwt.interceptor';
+import { StoreService } from './_services/store.service';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import { JwtInterceptor } from './_helpers/jwt.interceptor';
     AirportService,
     FlightService,
     NgbDateFormatterService,
+    StoreService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
