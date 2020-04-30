@@ -6,6 +6,7 @@ import { Router } from "@angular/router";
 import { PaymentService } from 'src/app/_services/payment.service';
 import { AuthService } from 'src/app/_services/auth.service'
 import { Flight } from '../_models/flight';
+import { StoreService } from '../_services/store.service';
 
 @Component({
   selector: 'app-payment',
@@ -28,20 +29,19 @@ export class PaymentComponent implements OnInit {
     private stripeService: StripeService,
     private paymentService: PaymentService,
     private authService: AuthService,
+    private storeService: StoreService,
     private router: Router,
   ) { }
 
   ngOnInit(): void {
-    console.log(history.state);
-    ({ agencyId: this.agencyId } = this.authService.currentUserValue);
+    
+    ({ agencyId: this.agencyId, customerId: this.customerId } = this.storeService.getStore());
     ({ role: this.role } = this.authService.currentUserValue);
-    ({ customerId: this.customerId } = history.state);
-    const { flight: chosenFlight } = history.state;
+    const { flight: chosenFlight } = this.storeService.getStore();
     this.redirects = {
-      agent: ['/agency', this.agencyId, 'customer', this.customerId],
-      counter: ['/counter/customer', this.customerId],
-      // do we have path for customer tickets page?
-      customer: ['/tickets', this.customerId]
+      agent: ['/agency/customer'],
+      counter: ['/counter/customer'],
+      customer: ['/tickets']
     }
 
     if (chosenFlight) {

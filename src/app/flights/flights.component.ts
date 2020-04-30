@@ -8,6 +8,7 @@ import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/fo
 import { FlightService } from '../_services/flight.service';
 import { Flight } from '../_models/flight';
 import { NgbDateFormatterService } from '../_services/ngb-date-formatter.service';
+import { StoreService } from '../_services/store.service';
 
 @Component({
   selector: 'app-flights',
@@ -15,21 +16,22 @@ import { NgbDateFormatterService } from '../_services/ngb-date-formatter.service
   styleUrls: ['./flights.component.css']
 })
 export class FlightsComponent implements OnInit {
-  private sub: any;
+  // private sub: any;
   customerId: number;
 
   flightForm: FormGroup;
   airports: [Airport];
   flights: [Flight];
   errorMessage: string;
-  user: User = {
-    userId:2,
-    email: "aaa@aaa.com",
-    password: null,
-    role:"counter",
-    name: null,
-    token: null
-  }
+  // user: User = {
+  //   userId:2,
+  //   email: "aaa@aaa.com",
+  //   password: null,
+  //   role:"counter",
+  //   name: null,
+  //   token: null
+  // }
+  user;
   page = 1;
   pageSize = 10;
   loading = false;
@@ -38,6 +40,7 @@ export class FlightsComponent implements OnInit {
     private airportService: AirportService,
     private flightService: FlightService,
     private authService: AuthService,
+    private storeService: StoreService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
@@ -59,9 +62,23 @@ export class FlightsComponent implements OnInit {
           break;
         }
         case "customer": {
+          this.airportService.getAirportsForCounter().subscribe((airports: [Airport]) => {
+            this.loading = false;
+            this.airports = airports;
+          }, (err) => {
+            this.loading = false;
+            this.errorMessage = err.message;
+          });
           break;
         }
         case "agent": {
+          this.airportService.getAirportsForCounter().subscribe((airports: [Airport]) => {
+            this.loading = false;
+            this.airports = airports;
+          }, (err) => {
+            this.loading = false;
+            this.errorMessage = err.message;
+          });
           break;
         }
         default: {
@@ -96,9 +113,25 @@ export class FlightsComponent implements OnInit {
         break;
       }
       case "customer": {
+        this.flightService.getFlightsForCounter(originCode, destinationCode, departureDate)
+        .subscribe((flights: [Flight]) => {
+          this.loading = false;
+          this.flights = flights;
+        }, (err) => {
+          this.loading = false;
+          this.errorMessage = err.message;
+        });
         break;
       }
       case "agent": {
+        this.flightService.getFlightsForCounter(originCode, destinationCode, departureDate)
+        .subscribe((flights: [Flight]) => {
+          this.loading = false;
+          this.flights = flights;
+        }, (err) => {
+          this.loading = false;
+          this.errorMessage = err.message;
+        });
         break;
       }
       default: {
@@ -126,6 +159,11 @@ export class FlightsComponent implements OnInit {
       }
     }
     return { invalidDate: true };
+  }
+
+  selectFlight(flight) {
+    this.storeService.setStore( { ...this.storeService.getStore(), flight: flight})
+    this.router.navigate(['/payment']);
   }
 
 }

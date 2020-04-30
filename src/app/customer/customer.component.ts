@@ -143,7 +143,4 @@ export class CustomerComponent implements OnInit {
     this.getTicketsByAgencyIdAndCustomerId(this.agencyId, this.customerId);
   }
 
-  ngOnDestroy() {
-    this.sub.unsubscribe();
-  }
 }
