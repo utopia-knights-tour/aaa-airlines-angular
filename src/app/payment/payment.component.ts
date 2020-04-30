@@ -24,7 +24,7 @@ export class PaymentComponent implements OnInit {
   redirects: any;
   role: string;
 
-  constructor(private fb: FormBuilder,
+  constructor(
     private stripeService: StripeService,
     private paymentService: PaymentService,
     private authService: AuthService,
@@ -34,34 +34,33 @@ export class PaymentComponent implements OnInit {
   ngOnInit(): void {
     console.log(history.state);
     ({ agencyId: this.agencyId } = this.authService.currentUserValue);
-    ({ role: this.role} = this.authService.currentUserValue);
-    // customerId get from localstorage, path, query?
+    ({ role: this.role } = this.authService.currentUserValue);
     ({ customerId: this.customerId } = history.state);
     const { flight: chosenFlight } = history.state;
-    this.redirects = { 
-      agency: `/agency/${this.agencyId}/customer/${this.customerId}`,
-      counter: `/counter/customer/${this.customerId}`,
+    this.redirects = {
+      agent: ['/agency', this.agencyId, 'customer', this.customerId],
+      counter: ['/counter/customer', this.customerId],
       // do we have path for customer tickets page?
-      customer: `/tickets/${this.customerId}`
+      customer: ['/tickets', this.customerId]
     }
 
     if (chosenFlight) {
       this.flight = {
-      flightId: chosenFlight.flightId,
-      sourceAirport: chosenFlight.sourceAirport.airportCode,
-      destinationAirport: chosenFlight.destinationAirport.airportCode,
-      cost: chosenFlight.cost,
-      arrivalDate: chosenFlight.arrivalDate,
-      departureDate: chosenFlight.departureDate,
-      departureTime: chosenFlight.departureTime,
-      arrivalTime: chosenFlight.arrivalTime
+        flightId: chosenFlight.flightId,
+        sourceAirport: chosenFlight.sourceAirport.airportCode,
+        destinationAirport: chosenFlight.destinationAirport.airportCode,
+        cost: chosenFlight.cost,
+        arrivalDate: chosenFlight.arrivalDate,
+        departureDate: chosenFlight.departureDate,
+        departureTime: chosenFlight.departureTime,
+        arrivalTime: chosenFlight.arrivalTime
+      }
     }
-  }
-  if (this.flight) {
-    this.paymentInfo = { ticketInfo: { flightId: this.flight.flightId, customerId: this.customerId, agencyId: this.agencyId, amount: this.flight.cost * 100 }, paymentMethodId: null }
-  }  
-  
-    
+    if (this.flight) {
+      this.paymentInfo = { ticketInfo: { flightId: this.flight.flightId, customerId: this.customerId, agencyId: this.agencyId, amount: this.flight.cost * 100 }, paymentMethodId: null }
+    }
+
+
     this.stripeService.elements()
       .subscribe(elements => {
         this.elements = elements;
@@ -100,7 +99,7 @@ export class PaymentComponent implements OnInit {
             .subscribe(result => {
               console.log(result);
               this.result = 'PAYMENT SUCCEDED';
-              this.router.navigate(this.redirects[this.role])
+              this.redirect();
             }, err => {
               console.log(err);
               this.result = 'PAYMENT FAILED';
@@ -110,5 +109,9 @@ export class PaymentComponent implements OnInit {
         console.log(err);
         this.result = 'PAYMENT FAILED';
       });
+  }
+
+  redirect() {
+    this.router.navigate(this.redirects[this.role])
   }
 }
