@@ -56,6 +56,7 @@ export class CustomerComponent implements OnInit {
     this.loading = true;
     this.customerService.getCustomerById(id).subscribe(
       (data) => {
+        console.log(data);
         this.loading = false;
         this.customer = data;
       },
@@ -71,18 +72,19 @@ export class CustomerComponent implements OnInit {
     if (this.page) requestParams.push({ page: this.page });
     if (this.pageSize) requestParams.push({ pagesize: this.pageSize });
     if (this.role == "counter") {
-      this.ticketService
-      .getTicketsByCustomerId(customerId, requestParams).subscribe(
-        (data) => {
-          this.loading = false;
-          this.tickets = data;
-          this.ticketsCount = this.tickets.length;
-          console.log(this.tickets);
-        },
-        (error) => {
-          this.loading = false;
-        }
-      );
+      // this.ticketService
+      // .getTicketsByCustomerId(customerId, requestParams).subscribe(
+      //   (data) => {
+      //     console.log(data);
+      //     this.loading = false;
+      //     this.tickets = data;
+      //     this.ticketsCount = this.tickets.length;
+      //     console.log(this.tickets);
+      //   },
+      //   (error) => {
+      //     this.loading = false;
+      //   }
+      // );
     } else if (this.role == "agent") {
       this.ticketService
       .getTicketsByAgencyIdAndCustomerId(agencyId, customerId, requestParams)

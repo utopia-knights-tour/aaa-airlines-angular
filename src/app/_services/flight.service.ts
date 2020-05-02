@@ -1,18 +1,27 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Flight } from '../_models/flight'
+import { AuthService } from './auth.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FlightService {
 
- 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
-  getFlightsForCounter(originCode:string, destinationCode:string, departureDate:string) {
-    let query = `originCode=${originCode}&destinationCode=${destinationCode}&departureDate=${departureDate}`;
-    return this.http.get(`https://meksvi4fnh.execute-api.us-east-1.amazonaws.com/dev/counter/flights?${query}`);
+  getFlights(requestParams: Array<string>) {
+    let queryString = "";
+    if (requestParams && requestParams.length) {
+      queryString += "?";
+      let requestParam = Object.entries(requestParams[0])[0];
+      queryString += `${requestParam[0]}=${requestParam[1]}`;
+      for (let i = 1; i < requestParams.length; i++) {
+        requestParam = Object.entries(requestParams[i])[0];
+        queryString += `&${requestParam[0]}=${requestParam[1]}`;
+      }
+    }
+    return this.http.get(`${environment.apiUrl}/${this.authService.currentUserValue.role}/flights${queryString}`);
   }
-  
+
 }

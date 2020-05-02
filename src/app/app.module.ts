@@ -30,6 +30,7 @@ import { CounterComponent } from './counter/counter.component';
 
 import { JwtInterceptor } from './_helpers/jwt.interceptor';
 import { StoreService } from './_services/store.service';
+import { CustomerSearchComponent } from './customer-search/customer-search.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { StoreService } from './_services/store.service';
     PaymentComponent,
     CustomerComponent,
     FlightsComponent,
-    CounterComponent
+    CounterComponent,
+    CustomerSearchComponent
   ],
   imports: [
     BrowserModule,

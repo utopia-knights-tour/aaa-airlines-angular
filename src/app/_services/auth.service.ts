@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment'
 
 import { User } from '../_models/user';
 
@@ -26,13 +27,13 @@ export class AuthService {
     }
 
     login(email, password) {
-        return this.http.post<any>('https://meksvi4fnh.execute-api.us-east-1.amazonaws.com/dev/login', { email, password })
+        return this.http.post<any>(`${environment.apiUrl}/login`, { email, password })
             .pipe(map(user => {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
                 console.log(user);
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                this.currentUserSubject.next(user);
-                return user;
+                localStorage.setItem('currentUser', JSON.stringify({ token: user.token, ...user.user }));
+                this.currentUserSubject.next({ token: user.token, ...user.user });
+                return { token: user.token, ...user.user };
             }));
     }
 
@@ -42,7 +43,14 @@ export class AuthService {
         this.currentUserSubject.next(null);
     }
 
-    getCustomerByUserId(userId) {
+    getCustomerByUserIdAndAddToLocalStorage(userId) {
         return this.http.get<any>(`http://52.91.174.134:3000/customer/customer?userId=${userId}`)
+            .pipe(map(customer => {
+                // store user details and jwt token in local storage to keep user logged in between page refreshes
+                console.log(customer);
+                localStorage.setItem('currentUser', JSON.stringify({ ...this.currentUserValue, customerId: customer.customerId }));
+                this.currentUserSubject.next({ ...this.currentUserValue, customerId: customer.customerId });
+                return customer;
+            }));
     }
 }

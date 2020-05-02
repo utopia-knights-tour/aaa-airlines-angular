@@ -52,7 +52,7 @@ export class FlightsComponent implements OnInit {
       this.user = this.authService.currentUserValue;
       switch (this.user.role) {
         case "counter": {
-          this.airportService.getAirportsForCounter().subscribe((airports: [Airport]) => {
+          this.airportService.getAirports().subscribe((airports: [Airport]) => {
             this.loading = false;
             this.airports = airports;
           }, (err) => {
@@ -62,7 +62,7 @@ export class FlightsComponent implements OnInit {
           break;
         }
         case "customer": {
-          this.airportService.getAirportsForCounter().subscribe((airports: [Airport]) => {
+          this.airportService.getAirports().subscribe((airports: [Airport]) => {
             this.loading = false;
             this.airports = airports;
           }, (err) => {
@@ -72,7 +72,7 @@ export class FlightsComponent implements OnInit {
           break;
         }
         case "agent": {
-          this.airportService.getAirportsForCounter().subscribe((airports: [Airport]) => {
+          this.airportService.getAirports().subscribe((airports: [Airport]) => {
             this.loading = false;
             this.airports = airports;
           }, (err) => {
@@ -102,7 +102,7 @@ export class FlightsComponent implements OnInit {
     // Call to flights service to list all the flights.
     switch (this.user.role) {
       case "counter": {
-        this.flightService.getFlightsForCounter(originCode, destinationCode, departureDate)
+        this.flightService.getFlights([originCode, destinationCode, departureDate])
         .subscribe((flights: [Flight]) => {
           this.loading = false;
           this.flights = flights;
@@ -113,7 +113,7 @@ export class FlightsComponent implements OnInit {
         break;
       }
       case "customer": {
-        this.flightService.getFlightsForCounter(originCode, destinationCode, departureDate)
+        this.flightService.getFlights([originCode, destinationCode, departureDate])
         .subscribe((flights: [Flight]) => {
           this.loading = false;
           this.flights = flights;
@@ -124,7 +124,7 @@ export class FlightsComponent implements OnInit {
         break;
       }
       case "agent": {
-        this.flightService.getFlightsForCounter(originCode, destinationCode, departureDate)
+        this.flightService.getFlights([originCode, destinationCode, departureDate])
         .subscribe((flights: [Flight]) => {
           this.loading = false;
           this.flights = flights;

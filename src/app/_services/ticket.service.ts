@@ -1,11 +1,13 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
+import { environment } from '../../environments/environment';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: "root",
 })
 export class TicketService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   getTicketsByCustomerId(customerId: number, requestParams: Array<string>) {
     let queryString = "";
@@ -20,7 +22,7 @@ export class TicketService {
     }
     return this.http.get(
       //change this
-      `https://meksvi4fnh.execute-api.us-east-1.amazonaws.com/dev/counter/tickets${queryString}&customerId=${customerId}`
+      `${environment.apiUrl}/${this.authService.currentUserValue.role}/tickets${queryString}&customerId=${customerId}`
     );
   }
 
