@@ -56,7 +56,7 @@ export class LoginComponent implements OnInit {
       .subscribe(
         (data) => {
           if (data.role == "customer") {
-            this.authService.getCustomerByUserId(data.userId)
+            this.authService.getCustomerByUserIdAndAddToLocalStorage(data.userId)
             .subscribe(customer => this.storeService.setStore(customer));
             this.returnUrl = "/flights";
           } else if (data.role == "counter") {
