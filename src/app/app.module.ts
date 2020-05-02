@@ -29,6 +29,7 @@ import { NgbDateFormatterService } from './_services/ngb-date-formatter.service'
 import { CounterComponent } from './counter/counter.component';
 
 import { JwtInterceptor } from './_helpers/jwt.interceptor';
+import { CustomerSearchComponent } from './customer-search/customer-search.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { JwtInterceptor } from './_helpers/jwt.interceptor';
     PaymentComponent,
     CustomerComponent,
     FlightsComponent,
-    CounterComponent
+    CounterComponent,
+    CustomerSearchComponent
   ],
   imports: [
     BrowserModule,
