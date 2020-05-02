@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from "@angular/forms";
 import { StripeService, Elements, Element as StripeElement } from "ngx-stripe";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 
 import { PaymentService } from 'src/app/_services/payment.service';
 import { AuthService } from 'src/app/_services/auth.service'
 import { Flight } from '../_models/flight';
-import { StoreService } from '../_services/store.service';
+import { FlightService } from '../_services/flight.service';
 
 @Component({
   selector: 'app-payment',
@@ -24,42 +24,38 @@ export class PaymentComponent implements OnInit {
   customerId: number;
   redirects: any;
   role: string;
+  private sub: any;
+  flightId: any;
 
   constructor(
     private stripeService: StripeService,
     private paymentService: PaymentService,
     private authService: AuthService,
-    private storeService: StoreService,
+    private flightService: FlightService,
     private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
+    this.sub = this.route.params.subscribe((params) => {
+      this.flightId = +params["flightId"];
+      this.customerId = +params["customerId"];
+    });
     
-    ({ agencyId: this.agencyId, customerId: this.customerId } = this.storeService.getStore());
-    ({ role: this.role } = this.authService.currentUserValue);
-    const { flight: chosenFlight } = this.storeService.getStore();
-    this.redirects = {
-      agent: ['/agency/customer'],
-      counter: ['/counter/customer'],
-      customer: ['/tickets']
-    }
+    ({ role: this.role, agencyId: this.agencyId } = this.authService.currentUserValue);
+    this.flightService.getFlightById(this.flightId)
+    .subscribe((flight) => {
+      this.flight = flight;
+    });
 
-    if (chosenFlight) {
-      this.flight = {
-        flightId: chosenFlight.flightId,
-        sourceAirport: chosenFlight.sourceAirport.airportCode,
-        destinationAirport: chosenFlight.destinationAirport.airportCode,
-        cost: chosenFlight.cost,
-        arrivalDate: chosenFlight.arrivalDate,
-        departureDate: chosenFlight.departureDate,
-        departureTime: chosenFlight.departureTime,
-        arrivalTime: chosenFlight.arrivalTime
-      }
+    this.redirects = {
+      agent: ['/agency/customer', this.customerId, 'tickets'],
+      counter: ['/counter/customer', this.customerId, 'tickets'],
+      customer: ['/tickets']
     }
     if (this.flight) {
       this.paymentInfo = { ticketInfo: { flightId: this.flight.flightId, customerId: this.customerId, agencyId: this.agencyId, amount: this.flight.cost * 100 }, paymentMethodId: null }
     }
-
 
     this.stripeService.elements()
       .subscribe(elements => {

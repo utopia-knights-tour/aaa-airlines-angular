@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CustomerService } from '../_services/customer.service';
 import { Router } from '@angular/router';
-import { StoreService } from '../_services/store.service';
 import { AuthService } from '../_services/auth.service';
 
 @Component({
@@ -22,7 +21,6 @@ export class CustomerSearchComponent implements OnInit {
 
   constructor(
     private customerService: CustomerService,
-    private storeService: StoreService,
     private authService: AuthService,
     private router: Router
   ) { }
@@ -53,8 +51,8 @@ export class CustomerSearchComponent implements OnInit {
   }
 
   getCustomerById(id: number) {
-      this.storeService.setStore({...this.storeService.getStore(), customerId: id});
-      this.router.navigate([`${this.authService.currentUserValue.role}/customer`]);
+      
+      this.router.navigate([`${this.authService.currentUserValue.role}/customer`, id, 'tickets']);
     }
 
   changePage(event: Event) {

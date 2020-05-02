@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: "root",
@@ -20,11 +21,14 @@ export class TicketService {
         queryString += `&${requestParam[0]}=${requestParam[1]}`;
       }
     }
-    return this.http.get(
+    return this.http.get<any>(
       //change this
       `${environment.apiUrl}/${this.authService.currentUserValue.role}/tickets${queryString}&customerId=${customerId}`
-    );
-  }
+    ).pipe(map(response => {
+      console.log(response)  
+      return response.pageContent;
+  }));
+}
 
   getTicketsByAgencyIdAndCustomerId(agencyId: number, customerId: number, requestParams: Array<string>) {
     let queryString = "";
