@@ -10,6 +10,7 @@ import { PaymentService } from "../_services/payment.service";
 import { StoreService } from '../_services/store.service';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Customer } from '../_models/customer';
+import { PlatformLocation } from '@angular/common';
 
 @Component({
   selector: "app-customer",
@@ -45,7 +46,8 @@ export class CustomerComponent implements OnInit {
     private modalService: NgbModal,
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private location: PlatformLocation
   ) {}
 
   ngOnInit() {
@@ -166,6 +168,9 @@ export class CustomerComponent implements OnInit {
 
   openEditModal(content: any) {
       this.modalRef = this.modalService.open(content);
+      this.location.onPopState(() => {
+        this.modalRef.close();
+      })
   }
 
   changePage(event: Event) {

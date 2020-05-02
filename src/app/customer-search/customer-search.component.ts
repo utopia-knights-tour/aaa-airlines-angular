@@ -6,6 +6,7 @@ import { AuthService } from '../_services/auth.service';
 import { Customer } from '../_models/customer';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { PlatformLocation } from '@angular/common';
 
 @Component({
   selector: 'app-customer-search',
@@ -31,8 +32,11 @@ export class CustomerSearchComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private modalService: NgbModal,
-    private fb: FormBuilder
-  ) { }
+    private fb: FormBuilder,
+    private location: PlatformLocation
+  ) {
+
+  }
 
   ngOnInit(): void {
     this.getCustomers();
@@ -86,6 +90,7 @@ export class CustomerSearchComponent implements OnInit {
 
   open(content: any) {
     this.modalRef = this.modalService.open(content);
+    this.location.onPopState(() => this.modalRef.close());
   }
 
   onSubmitModal() {
