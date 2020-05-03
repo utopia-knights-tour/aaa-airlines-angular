@@ -153,7 +153,10 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="c()">Cancel</button>
-        <button type="button" class="btn btn-primary" (click)="onSubmitModal()">Create</button>
+        <button type="button"
+        class="btn btn-primary"
+        [disabled]="createCustomerForm.invalid"
+        (click)="onSubmitModal()">Create</button>
       </div>
     </div>
   </div>

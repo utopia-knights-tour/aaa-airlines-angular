@@ -100,6 +100,7 @@ export class CustomerSearchComponent implements OnInit {
       customerPhone: this.phoneNumber().value
     }).subscribe(() => {
       this.modalRef.close();
+      this.createCustomerForm.reset();
       this.getCustomers();
     });
   }
