@@ -51,6 +51,12 @@ export class PaymentComponent implements OnInit {
     .subscribe((flight) => {
       console.log(flight);
       this.flight = flight;
+      if (this.authService.currentUserValue.role == 'customer') {
+        this.flight = {
+          ...flight,
+          departureDate: flight.departureDate.substring(0, flight.departureDate.indexOf('T00:')),
+        }
+      }
       this.paymentInfo = { ticketInfo: { flightId: this.flightId, customerId: (this.customerId || this.userCustomerId), agencyId: this.agencyId, amount: this.flight.cost * 100 }, paymentMethodId: null }
       console.log(this.paymentInfo);
     });
