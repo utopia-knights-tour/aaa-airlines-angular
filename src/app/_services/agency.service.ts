@@ -1,18 +1,21 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AgencyService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+    private authService: AuthService) { }
 
   getAgencies() {
-    return this.http.get('https://g0jb7m2tlk.execute-api.us-east-2.amazonaws.com/dev/agencies');
+    return this.http.get(`${environment.apiUrl}/${this.authService.currentUserValue.role}/agencies`);
   }
   
   getAgencyById(id: number) {
-    return this.http.get(`https://g0jb7m2tlk.execute-api.us-east-2.amazonaws.com/dev/agencies/${id}`);
+    return this.http.get(`${environment.apiUrl}/${this.authService.currentUserValue.role}/agencies/${id}`);
   }
 }

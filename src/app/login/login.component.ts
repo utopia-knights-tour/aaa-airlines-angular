@@ -53,15 +53,20 @@ export class LoginComponent implements OnInit {
       .pipe(first())
       .subscribe(
         (data) => {
+          console.log(data);
           if (data.role == "customer") {
-            this.authService.getCustomerByUserIdAndAddToLocalStorage(data.userId);
-            this.returnUrl = "/flights";
+            this.authService.getCustomerByUserId(data.userId).pipe(first()).subscribe(() => {
+              this.returnUrl = "/flights";
+              this.router.navigate([this.returnUrl]);
+            })
           } else if (data.role == "counter") {
             this.returnUrl = "/counter";
+            this.router.navigate([this.returnUrl]);
           } else if (data.role == "agent" && data.agencyId) {
-            this.returnUrl = `/agency`;
+            this.returnUrl = `/agent`;
+            this.router.navigate([this.returnUrl]);
           }
-          this.router.navigate([this.returnUrl]);
+
         },
         (error) => {
           this.loading = false;

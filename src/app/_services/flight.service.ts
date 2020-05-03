@@ -23,7 +23,7 @@ export class FlightService {
         queryString += `&${requestParam[0]}=${requestParam[1]}`;
       }
     }
-    return this.http.get(`${environment.apiUrl}/${this.authService.currentUserValue.role}/flights${queryString}`);
+    return this.http.get<Flight[]>(`${environment.apiUrl}/${this.authService.currentUserValue.role}/flights${queryString}`);
   }
 
   getFlightById(flightId) {

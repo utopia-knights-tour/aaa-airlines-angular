@@ -46,7 +46,14 @@
       <th>Name</th>
       <th>Address</th>
       <th>Phone</th>
-      <th></th>
+      <th>
+        <button
+        class="btn btn-success"
+        (click)="addCustomer()"
+        >
+          Add Customer
+        </button>
+      </th>
     </thead>
     <tbody>
       <tr *ngFor="let customer of customers">
@@ -69,6 +76,6 @@
     [pageSize]="pageSize"
     [collectionSize]="customersCount"
     [boundaryLinks]="true"
-    (pageChange)="changePage($event)"
+    (pageChange)="changePage()"
   ></ngb-pagination>
 </div>

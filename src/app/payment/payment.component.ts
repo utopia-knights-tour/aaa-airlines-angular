@@ -22,6 +22,7 @@ export class PaymentComponent implements OnInit {
   flight: Flight;
   agencyId: number;
   customerId: number;
+  userCustomerId: any;
   redirects: any;
   role: string;
   private sub: any;
@@ -41,20 +42,23 @@ export class PaymentComponent implements OnInit {
       this.flightId = +params["flightId"];
       this.customerId = +params["customerId"];
     });
-    
-    ({ role: this.role, agencyId: this.agencyId } = this.authService.currentUserValue);
+    console.log(this.authService.currentUserValue)
+    if (!this.customerId) {
+      this.userCustomerId = this.authService.currentUserValue.customer.customerId;
+    }
+   ({ role: this.role, agencyId: this.agencyId } = this.authService.currentUserValue);
     this.flightService.getFlightById(this.flightId)
     .subscribe((flight) => {
+      console.log(flight);
       this.flight = flight;
+      this.paymentInfo = { ticketInfo: { flightId: this.flightId, customerId: (this.customerId || this.userCustomerId), agencyId: this.agencyId, amount: this.flight.cost * 100 }, paymentMethodId: null }
+      console.log(this.paymentInfo);
     });
 
     this.redirects = {
       agent: ['/agency/customer', this.customerId, 'tickets'],
       counter: ['/counter/customer', this.customerId, 'tickets'],
       customer: ['/tickets']
-    }
-    if (this.flight) {
-      this.paymentInfo = { ticketInfo: { flightId: this.flight.flightId, customerId: this.customerId, agencyId: this.agencyId, amount: this.flight.cost * 100 }, paymentMethodId: null }
     }
 
     this.stripeService.elements()

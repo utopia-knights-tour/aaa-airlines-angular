@@ -9,9 +9,9 @@ import { AuthService } from './auth.service';
 export class CustomerService {
 
   constructor(private http: HttpClient, private authService: AuthService) { }
-
+  
   getCustomerById(id: number) {
-    return this.http.get(`${environment.apiUrl}/${this.authService.currentUserValue.role}/customers/${id}`)
+    return this.http.get<any>(`${environment.apiUrl}/${this.authService.currentUserValue.role}/customers/${id}`)
   }
 
   getCustomers(requestParams: Array<string>) {

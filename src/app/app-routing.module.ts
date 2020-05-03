@@ -68,22 +68,22 @@ const routes: Routes = [
     component: CounterComponent,
   },
   {
-    path: "agency",
+    path: "agent",
     canActivate: [AuthGuard, AgencyGuard],
     component: AgencyComponent,
   },
   {
-    path: "agency/customer/:customerId/tickets",
+    path: "agent/customer/:customerId/tickets",
     canActivate: [AuthGuard, AgencyGuard],
     component: CustomerComponent,
   },
   {
-    path: "agency/customer/:customerId/flights",
+    path: "agent/customer/:customerId/flights",
     canActivate: [AuthGuard, AgencyGuard],
     component: FlightsComponent,
   },
   {
-    path: "agency/customer/:customerId/flights/:flightId/payment",
+    path: "agent/customer/:customerId/flights/:flightId/payment",
     canActivate: [AuthGuard, AgencyGuard],
     component: PaymentComponent,
   },

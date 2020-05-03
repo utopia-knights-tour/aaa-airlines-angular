@@ -15,12 +15,12 @@ import { NgbDateFormatterService } from '../_services/ngb-date-formatter.service
   styleUrls: ['./flights.component.css']
 })
 export class FlightsComponent implements OnInit {
-  // private sub: any;
+  private sub: any;
   customerId: number;
-
+  userCustomerId: number;
   flightForm: FormGroup;
   airports: [Airport];
-  flights: [Flight];
+  flights: Flight[];
   errorMessage: string;
   // user: User = {
   //   userId:2,
@@ -42,103 +42,93 @@ export class FlightsComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private dateFormatter: NgbDateFormatterService) {}
+    private dateFormatter: NgbDateFormatterService) { }
 
   ngOnInit(): void {
-   
-      this.loading = true;
-      this.user = this.authService.currentUserValue;
-      switch (this.user.role) {
-        case "counter": {
-          this.airportService.getAirports().subscribe((airports: [Airport]) => {
-            this.loading = false;
-            this.airports = airports;
-          }, (err) => {
-            this.loading = false;
-            this.errorMessage = err.message;
-          });
-          break;
-        }
-        case "customer": {
-          this.airportService.getAirports().subscribe((airports: [Airport]) => {
-            this.loading = false;
-            this.airports = airports;
-          }, (err) => {
-            this.loading = false;
-            this.errorMessage = err.message;
-          });
-          break;
-        }
-        case "agent": {
-          this.airportService.getAirports().subscribe((airports: [Airport]) => {
-            this.loading = false;
-            this.airports = airports;
-          }, (err) => {
-            this.loading = false;
-            this.errorMessage = err.message;
-          });
-          break;
-        }
-        default: {
-          break;
-        }
-      }
-      this.flightForm = this.formBuilder.group({
-        originCode: [null, Validators.required],
-        destinationCode: [null, Validators.required],
-        departureDate: [null, [Validators.required, this.checkIfDateIsValid]],
-      }, {
-        validator: this.checkIfAirportsNotEqual
-      });
+
+    this.sub = this.route.params.subscribe((params) => {
+      this.customerId = +params["customerId"];
+    });
+
+
+    this.loading = true;
+    this.airportService.getAirports().subscribe((airports: [Airport]) => {
+      this.loading = false;
+      console.log(airports);
+      this.airports = airports;
+    }, (err) => {
+      this.loading = false;
+      this.errorMessage = err.message;
+    });
+    this.flightForm = this.formBuilder.group({
+      originCode: [null, Validators.required],
+      destinationCode: [null, Validators.required],
+      departureDate: [null,
+        [Validators.required, this.checkIfDateIsValid]
+      ],
+    }, {
+      validator: this.checkIfAirportsNotEqual
+    });
+  }
+
+  originCode() {
+    return this.flightForm.get('originCode');
+  }
+
+  destinationCode() {
+    return this.flightForm.get('destinationCode');
+  }
+
+  departureDate() {
+    return this.flightForm.get('departureDate');
   }
 
   onFlightSubmit() {
-    const originCode = this.flightForm.get('originCode').value;
-    const destinationCode = this.flightForm.get('destinationCode').value;
+    const originCode = this.originCode().value;
+    const destinationCode = this.destinationCode().value;
     const departureDate = this.dateFormatter.format(this.flightForm.get('departureDate').value);
-    console.log(departureDate);
+    // Set up query params for AJAX call.
+    let requestParams = [];
+    requestParams.push({ originCode });
+    requestParams.push({ destinationCode });
+    requestParams.push({ departureDate });
     // Call to flights service to list all the flights.
-    switch (this.user.role) {
-      case "counter": {
-        this.flightService.getFlights([originCode, destinationCode, departureDate])
-        .subscribe((flights: [Flight]) => {
-          this.loading = false;
+    this.flightService.getFlights(requestParams)
+      .subscribe((flights) => {
+        this.loading = false;
+        console.log('flights', flights);
+        if (this.authService.currentUserValue.role === 'agent') {
+          this.flights = flights.map((flight) => {
+            return {
+              ...flight,
+              departureTime:
+                ("0" + flight.departureTime['hour']).slice(-2) +
+                ":" +
+                ("0" + flight.departureTime['minute']).slice(-2) +
+                ":" +
+                ("0" + flight.departureTime['second']).slice(-2),
+              arrivalTime:
+              ("0" + flight.arrivalTime['hour']).slice(-2) +
+              ":" +
+              ("0" + flight.arrivalTime['minute']).slice(-2) +
+              ":" +
+              ("0" + flight.arrivalTime['second']).slice(-2),
+            }
+          })
+        }
+        else {
           this.flights = flights;
-        }, (err) => {
-          this.loading = false;
-          this.errorMessage = err.message;
-        });
-        break;
-      }
-      case "customer": {
-        this.flightService.getFlights([originCode, destinationCode, departureDate])
-        .subscribe((flights: [Flight]) => {
-          this.loading = false;
-          this.flights = flights;
-        }, (err) => {
-          this.loading = false;
-          this.errorMessage = err.message;
-        });
-        break;
-      }
-      case "agent": {
-        this.flightService.getFlights([originCode, destinationCode, departureDate])
-        .subscribe((flights: [Flight]) => {
-          this.loading = false;
-          this.flights = flights;
-        }, (err) => {
-          this.loading = false;
-          this.errorMessage = err.message;
-        });
-        break;
-      }
-      default: {
-        break;
-      }
-    }
+        } 
+        
+
+        
+      }, (err) => {
+        this.loading = false;
+        this.errorMessage = err.message;
+      });
   }
 
-  checkIfAirportsNotEqual (c: AbstractControl) {
+  checkIfAirportsNotEqual(c: AbstractControl) {
     let originCode = c.get('originCode').value;
     let destinationCode = c.get('destinationCode').value;
     if (!originCode || !destinationCode || originCode != destinationCode) {
@@ -147,11 +137,11 @@ export class FlightsComponent implements OnInit {
     return { invalidTrip: true };
   }
 
-  checkIfDateIsValid (c: AbstractControl) {
+  checkIfDateIsValid(c: AbstractControl) {
     if (c.value && c.value.year && c.value.month && c.value.day) {
-      let departureDate = new Date(c.value.year, c.value.month-1, c.value.day);
+      let departureDate = new Date(c.value.year, c.value.month - 1, c.value.day);
       let currentDate = new Date();
-      currentDate.setHours(0,0,0,0)
+      currentDate.setHours(0, 0, 0, 0)
       if (departureDate >= currentDate) {
         return null;
       }
@@ -161,11 +151,11 @@ export class FlightsComponent implements OnInit {
 
   selectFlight(flightId) {
     const routes = {
-      counter: ['counter/customer', this.customerId, 'flights', flightId, 'payment' ],
-      agent: ['agent/customer', this.customerId, 'flights', flightId, 'payment' ],
+      counter: ['counter/customer', this.customerId, 'flights', flightId, 'payment'],
+      agent: ['agent/customer', this.customerId, 'flights', flightId, 'payment'],
       customer: ['flights', flightId, 'payment']
     }
-    
+
     this.router.navigate(routes[this.authService.currentUserValue.role]);
   }
 

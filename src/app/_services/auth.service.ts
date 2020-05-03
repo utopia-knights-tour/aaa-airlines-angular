@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment'
 
 import { User } from '../_models/user';
+import { Customer } from '../_models/customer';
 
 @Injectable({
     providedIn: 'root'
@@ -43,14 +44,13 @@ export class AuthService {
         this.currentUserSubject.next(null);
     }
 
-    getCustomerByUserIdAndAddToLocalStorage(userId) {
-        return this.http.get<any>(`http://52.91.174.134:3000/customer/customer?userId=${userId}`)
+    getCustomerByUserId(userId) {
+        return this.http.get<any>(`${environment.apiUrl}/customer/customers?userId=${userId}`)
             .pipe(map(customer => {
-                // store user details and jwt token in local storage to keep user logged in between page refreshes
                 console.log(customer);
-                localStorage.setItem('currentUser', JSON.stringify({ ...this.currentUserValue, customerId: customer.customerId }));
-                this.currentUserSubject.next({ ...this.currentUserValue, customerId: customer.customerId });
-                return customer;
+                localStorage.setItem('currentUser', JSON.stringify({ ...this.currentUserValue, customer }));
+                this.currentUserSubject.next({ ...this.currentUserValue, customer });
+                return customer;;
             }));
     }
 }

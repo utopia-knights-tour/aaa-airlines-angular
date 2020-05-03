@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CustomerService } from '../_services/customer.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../_services/auth.service';
+import { Customer } from '../_models/customer';
 
 @Component({
   selector: 'app-customer-search',
@@ -10,7 +11,7 @@ import { AuthService } from '../_services/auth.service';
 })
 export class CustomerSearchComponent implements OnInit {
 
-  customers: [];
+  customers: Customer[];
   customersCount: number;
   searchName = "";
   searchAddress = "";
@@ -29,6 +30,11 @@ export class CustomerSearchComponent implements OnInit {
     this.getCustomers();
   }
 
+  addCustomer() {
+      
+  }
+
+  
   getCustomers() {
     this.loading = true;
     let requestParams = [];
@@ -39,7 +45,6 @@ export class CustomerSearchComponent implements OnInit {
     if (this.searchPhone) requestParams.push({ customerPhone: this.searchPhone });
     this.customerService.getCustomers(requestParams).subscribe(
       (data: any) => {
-        console.log(data);
         this.loading = false;
         this.customers = data.customers || data.pageContent;
         this.customersCount = data.customersCount || data.totalRecords;
@@ -55,7 +60,7 @@ export class CustomerSearchComponent implements OnInit {
       this.router.navigate([`${this.authService.currentUserValue.role}/customer`, id, 'tickets']);
     }
 
-  changePage(event: Event) {
+  changePage() {
     this.getCustomers();
   }
 
