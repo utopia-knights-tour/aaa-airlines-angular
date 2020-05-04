@@ -94,7 +94,6 @@ export class CustomerComponent implements OnInit {
     this.loading = true;
     this.customerService.getCustomerById(id).subscribe(
       (data: Customer) => {
-        console.log(data);
         if (this.authService.currentUserValue.role === 'agent') {
           data = {
             customerId: data['id'],
@@ -129,12 +128,9 @@ export class CustomerComponent implements OnInit {
       this.ticketService
         .getTicketsByCustomerId(customerId, requestParams).subscribe(
           (data) => {
-
-            console.log(data);
             this.loading = false;
             this.tickets = data.pageContent || data;
             this.ticketsCount = this.tickets.length;
-            console.log(this.tickets);
           },
           (error) => {
             this.loading = false;
@@ -145,7 +141,6 @@ export class CustomerComponent implements OnInit {
         .getTicketsByAgencyIdAndCustomerId(agencyId, customerId, requestParams)
         .subscribe(
           (data) => {
-            console.log(data);
             this.loading = false;
             this.tickets = data["tickets"].map((ticket) => {
               return {
@@ -175,7 +170,6 @@ export class CustomerComponent implements OnInit {
     } else {
       this.ticketService.getTicketsByCustomerId(customerId, [])
       .subscribe(tickets => {
-        console.log(tickets);
         this.tickets = tickets.map(ticket => {
           return ({
             ticketId: ticket.ticketId,
@@ -201,7 +195,6 @@ export class CustomerComponent implements OnInit {
   }
 
   bookFlight() {
-    console.log(this.authService.currentUserValue);
     const flightRoutes = {
       counter: [`/${this.authService.currentUserValue.role}/customer`, this.customerId, 'flights'],
       agent: [`/${this.authService.currentUserValue.role}/customer`, this.customerId, 'flights'],
@@ -211,12 +204,10 @@ export class CustomerComponent implements OnInit {
   }
 
   cancelReservation() {
-    console.log(this.customerId + " " + this.selectedTicket);
     this.loading = true;
     this.paymentService.cancelTicket(this.customerId || this.userCustomerId, this.selectedTicket, this.agencyId || null)
       .subscribe(
         (data) => {
-          console.log(data);
           this.loading = false;
           this.modalRef.close();
           this.getTicketsByAgencyIdAndCustomerId(this.agencyId, this.customerId || this.userCustomerId);
@@ -231,7 +222,6 @@ export class CustomerComponent implements OnInit {
   }
 
   open(content, id) {
-    console.log(id);
     this.selectedTicket = id;
     this.modalRef = this.modalService.open(content);
     this.modalRef.result.then(

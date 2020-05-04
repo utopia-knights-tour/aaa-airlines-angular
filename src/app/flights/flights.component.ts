@@ -22,15 +22,6 @@ export class FlightsComponent implements OnInit {
   airports: [Airport];
   flights: Flight[];
   errorMessage: string;
-  // user: User = {
-  //   userId:2,
-  //   email: "aaa@aaa.com",
-  //   password: null,
-  //   role:"counter",
-  //   name: null,
-  //   token: null
-  // }
-  user;
   page = 1;
   pageSize = 10;
   loading = false;
@@ -55,7 +46,6 @@ export class FlightsComponent implements OnInit {
     this.loading = true;
     this.airportService.getAirports().subscribe((airports: [Airport]) => {
       this.loading = false;
-      console.log(airports);
       this.airports = airports;
     }, (err) => {
       this.loading = false;
@@ -97,7 +87,6 @@ export class FlightsComponent implements OnInit {
     this.flightService.getFlights(requestParams)
       .subscribe((flights) => {
         this.loading = false;
-        console.log('flights', flights);
         if (this.authService.currentUserValue.role === 'agent') {
           this.flights = flights.map((flight) => {
             return {

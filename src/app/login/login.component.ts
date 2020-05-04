@@ -53,7 +53,6 @@ export class LoginComponent implements OnInit {
       .pipe(first())
       .subscribe(
         (data) => {
-          console.log(data);
           if (data.role == "customer") {
             this.authService.getCustomerByUserId(data.userId).pipe(first()).subscribe(() => {
               this.returnUrl = "/flights";

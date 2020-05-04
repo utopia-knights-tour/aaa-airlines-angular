@@ -12,7 +12,6 @@ export class FlightService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   getFlights(requestParams: Array<string>) {
-    console.log(requestParams);
     let queryString = "";
     if (requestParams && requestParams.length) {
       queryString += "?";

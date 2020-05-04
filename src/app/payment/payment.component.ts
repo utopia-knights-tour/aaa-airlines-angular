@@ -49,7 +49,6 @@ export class PaymentComponent implements OnInit {
    ({ role: this.role, agencyId: this.agencyId } = this.authService.currentUserValue);
     this.flightService.getFlightById(this.flightId)
     .subscribe((flight) => {
-      console.log(flight);
       this.flight = flight;
       if (this.authService.currentUserValue.role == 'customer') {
         this.flight = {
@@ -80,7 +79,6 @@ export class PaymentComponent implements OnInit {
         }
       }
       this.paymentInfo = { ticketInfo: { flightId: this.flightId, customerId: (this.customerId || this.userCustomerId), agencyId: this.agencyId, amount: this.flight.cost * 100 }, paymentMethodId: null }
-      console.log(this.paymentInfo);
     });
 
     this.redirects = {
@@ -114,18 +112,15 @@ export class PaymentComponent implements OnInit {
   }
 
   pay() {
-    console.log(this.card);
     const paymentInfo = this.paymentInfo;
     this.stripeService
       .createPaymentMethod('card', this.card)
       .subscribe(result => {
-        console.log(result);
         const { paymentMethod } = result;
         if (paymentMethod) {
           paymentInfo.paymentMethodId = paymentMethod.id;
           this.paymentService.makePayment(paymentInfo)
             .subscribe(result => {
-              console.log(result);
               this.result = 'PAYMENT SUCCEDED';
               this.redirect();
             }, err => {

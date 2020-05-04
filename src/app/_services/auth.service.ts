@@ -31,7 +31,6 @@ export class AuthService {
         return this.http.post<any>(`${environment.apiUrl}/login`, { email, password })
             .pipe(map(user => {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
-                console.log(user);
                 localStorage.setItem('currentUser', JSON.stringify({ token: user.token, ...user.user }));
                 this.currentUserSubject.next({ token: user.token, ...user.user });
                 return { token: user.token, ...user.user };
@@ -47,7 +46,6 @@ export class AuthService {
     getCustomerByUserId(userId) {
         return this.http.get<any>(`${environment.apiUrl}/customer/customers?userId=${userId}`)
             .pipe(map(customer => {
-                console.log(customer);
                 localStorage.setItem('currentUser', JSON.stringify({ ...this.currentUserValue, customer }));
                 this.currentUserSubject.next({ ...this.currentUserValue, customer });
                 return customer;;

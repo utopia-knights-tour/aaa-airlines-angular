@@ -11,7 +11,7 @@ export class PaymentService {
 
   cancelTicket(customerId, ticketId, agencyId) {
     return this.http.request('delete',
-      `https://819t4j4ck8.execute-api.us-east-1.amazonaws.com/default/paymentLambda/${ticketId}`,
+      `${environment.apiUrl}/payment/${ticketId}`,
       {
         body: { customerId, agencyId }
       },
@@ -20,15 +20,13 @@ export class PaymentService {
 
 
   makePayment(paymentInformation) {
-    console.log(paymentInformation);
     return this.http.post(
-      `https://819t4j4ck8.execute-api.us-east-1.amazonaws.com/default/paymentLambda`,
+      `${environment.apiUrl}/payment`,
       paymentInformation,
       {
         headers: new HttpHeaders(
           ({
             'Content-Type': 'application/json',
-            'Accept': 'application/json'
           })
         )
       })
