@@ -8,6 +8,7 @@ import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/fo
 import { FlightService } from '../_services/flight.service';
 import { Flight } from '../_models/flight';
 import { NgbDateFormatterService } from '../_services/ngb-date-formatter.service';
+import { StoreService } from '../_services/store.service';
 
 @Component({
   selector: 'app-flights',
@@ -15,21 +16,22 @@ import { NgbDateFormatterService } from '../_services/ngb-date-formatter.service
   styleUrls: ['./flights.component.css']
 })
 export class FlightsComponent implements OnInit {
-  private sub: any;
+  // private sub: any;
   customerId: number;
 
   flightForm: FormGroup;
   airports: [Airport];
   flights: [Flight];
   errorMessage: string;
-  user: User = {
-    userId:2,
-    email: "aaa@aaa.com",
-    password: null,
-    role:"counter",
-    name: null,
-    token: null
-  }
+  // user: User = {
+  //   userId:2,
+  //   email: "aaa@aaa.com",
+  //   password: null,
+  //   role:"counter",
+  //   name: null,
+  //   token: null
+  // }
+  user;
   page = 1;
   pageSize = 10;
   loading = false;
@@ -38,75 +40,62 @@ export class FlightsComponent implements OnInit {
     private airportService: AirportService,
     private flightService: FlightService,
     private authService: AuthService,
+    private storeService: StoreService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private dateFormatter: NgbDateFormatterService) {}
 
   ngOnInit(): void {
-    this.sub = this.route.params.subscribe((params) => {
-      this.customerId = +params["customerId"];
-    });
       this.loading = true;
-      //this.user = this.authService.currentUserValue;
-      switch (this.user.role) {
-        case "counter": {
-          this.airportService.getAirportsForCounter().subscribe((airports: [Airport]) => {
-            this.loading = false;
-            this.airports = airports;
-          }, (err) => {
-            this.loading = false;
-            this.errorMessage = err.message;
-          });
-          break;
-        }
-        case "customer": {
-          break;
-        }
-        case "agent": {
-          break;
-        }
-        default: {
-          break;
-        }
-      }
+      this.airportService.getAirports().subscribe((airports: [Airport]) => {
+          this.loading = false;
+          this.airports = airports;
+      }, (err) => {
+          this.loading = false;
+          this.errorMessage = err.message;
+      });
       this.flightForm = this.formBuilder.group({
         originCode: [null, Validators.required],
         destinationCode: [null, Validators.required],
-        departureDate: [null, [Validators.required, this.checkIfDateIsValid]],
+        departureDate: [null,
+          [Validators.required, this.checkIfDateIsValid]
+        ],
       }, {
         validator: this.checkIfAirportsNotEqual
       });
   }
 
+  originCode() {
+    return this.flightForm.get('originCode');
+  }
+
+  destinationCode() {
+    return this.flightForm.get('destinationCode');
+  }
+
+  departureDate() {
+    return this.flightForm.get('departureDate');
+  }
+
   onFlightSubmit() {
-    const originCode = this.flightForm.get('originCode').value;
-    const destinationCode = this.flightForm.get('destinationCode').value;
+    const originCode = this.originCode().value;
+    const destinationCode = this.destinationCode().value;
     const departureDate = this.dateFormatter.format(this.flightForm.get('departureDate').value);
-    console.log(departureDate);
+    // Set up query params for AJAX call.
+    let requestParams = [];
+    requestParams.push({ originCode });
+    requestParams.push({ destinationCode });
+    requestParams.push({ departureDate });
     // Call to flights service to list all the flights.
-    switch (this.user.role) {
-      case "counter": {
-        this.flightService.getFlightsForCounter(originCode, destinationCode, departureDate)
-        .subscribe((flights: [Flight]) => {
-          this.loading = false;
-          this.flights = flights;
-        }, (err) => {
-          this.loading = false;
-          this.errorMessage = err.message;
-        });
-        break;
-      }
-      case "customer": {
-        break;
-      }
-      case "agent": {
-        break;
-      }
-      default: {
-        break;
-      }
-    }
+    this.flightService.getFlights(requestParams)
+      .subscribe((flights: [Flight]) => {
+        this.loading = false;
+        this.flights = flights;
+      }, (err) => {
+        this.loading = false;
+        this.errorMessage = err.message;
+      });
   }
 
   checkIfAirportsNotEqual (c: AbstractControl) {
@@ -128,6 +117,11 @@ export class FlightsComponent implements OnInit {
       }
     }
     return { invalidDate: true };
+  }
+
+  selectFlight(flight) {
+    this.storeService.setStore( { ...this.storeService.getStore(), flight: flight})
+    this.router.navigate(['/payment']);
   }
 
 }

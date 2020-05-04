@@ -1,7 +1,9 @@
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { AgencyService } from "../_services/agency.service";
+import { CustomerService } from "../_services/customer.service";
 import { CustomerSearchComponent } from "../customer-search/customer-search.component";
+import { AuthService } from '../_services/auth.service';
 
 @Component({
   selector: "app-agency",
@@ -17,19 +19,21 @@ export class AgencyComponent implements OnInit {
 
   constructor(
     private agencyService: AgencyService,
-    private route: ActivatedRoute
+    private customerService: CustomerService,
+    private authService: AuthService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.sub = this.route.params.subscribe((params) => {
-      this.agencyId = +params["agencyId"];
-    });
+   
+    ({ agencyId: this.agencyId } = this.authService.currentUserValue);
     this.getAgencyById(this.agencyId);
   }
 
   getAgencyById(id: number) {
     this.loading = true;
-    this.agencyService.getAgencyById(1).subscribe(
+    this.agencyService.getAgencyById(id).subscribe(
       (data) => {
         this.loading = false;
         this.agency = data;
@@ -39,5 +43,4 @@ export class AgencyComponent implements OnInit {
       }
     );
   }
-
 }

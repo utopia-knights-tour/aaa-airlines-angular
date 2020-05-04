@@ -1,15 +1,26 @@
 <h1>Agency</h1>
-<div class="card">
-  <div class="card-body">
-    <div class="card-block">
-      <h5 class="card-title">{{ agency.name }}</h5>
-      <div class="card-text">
-        {{ agency.address }}
-      </div>
-      <div class="card-text">
-        {{ agency.phone }}
+<div *ngIf="loading; then Spinner else AgentCard"></div>
+<ng-template #AgentCard>
+  <div class="card">
+    <div class="card-body">
+      <div class="card-block">
+        <h5 class="card-title">{{ agency.name }}</h5>
+        <div class="card-text">
+          {{ agency.address }}
+        </div>
+        <div class="card-text">
+          {{ agency.phone }}
+        </div>
       </div>
     </div>
   </div>
-</div>
+</ng-template>
+<ng-template #Spinner>
+  <div class="d-flex justify-content-center">
+    <div class="spinner-border text-primary mt-5" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+</ng-template>
+
 <app-customer-search></app-customer-search>

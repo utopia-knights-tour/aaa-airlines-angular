@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { first } from "rxjs/operators";
 
 import { AuthService } from "../_services/auth.service";
+import { StoreService } from '../_services/store.service';
 
 @Component({ templateUrl: "login.component.html" })
 export class LoginComponent implements OnInit {
@@ -16,7 +17,8 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private storeService: StoreService,
   ) {
     // redirect to home if already logged in
     if (this.authService.currentUserValue) {
@@ -54,11 +56,14 @@ export class LoginComponent implements OnInit {
       .subscribe(
         (data) => {
           if (data.role == "customer") {
+            this.authService.getCustomerByUserIdAndAddToLocalStorage(data.userId)
+            .subscribe(customer => this.storeService.setStore(customer));
             this.returnUrl = "/flights";
           } else if (data.role == "counter") {
             this.returnUrl = "/counter";
           } else if (data.role == "agent" && data.agencyId) {
-            this.returnUrl = `/agency/${data.agencyId}`;
+            this.storeService.setStore({agencyId: data.agencyId })
+            this.returnUrl = `/agency`;
           }
           this.router.navigate([this.returnUrl]);
         },
