@@ -34,8 +34,7 @@ export class CustomerService {
   }
 
   editCustomer(customer: Customer) {
-    return this.http.put(`${environment.apiUrl}/${this.authService.currentUserValue.role}/customers/
-    ${customer.customerId}`, customer);
+    return this.http.put(`${environment.apiUrl}/${this.authService.currentUserValue.role}/customers/${customer.customerId}`, customer);
   }
 
 }

@@ -59,6 +59,14 @@ export class CustomerComponent implements OnInit {
     if (!this.customerId) {
       this.userCustomerId = this.authService.currentUserValue.customer.customerId;
       this.customer = this.authService.currentUserValue.customer;
+      this.editCustomerForm = this.fb.group({
+        name: [this.customer.customerName,
+          [Validators.required, Validators.minLength(3), Validators.maxLength(45)]],
+        address: [this.customer.customerAddress,
+          [Validators.required, Validators.minLength(15), Validators.maxLength(50)]],
+        phoneNumber: [this.customer.customerPhone,
+          [Validators.required, Validators.pattern('^\\([0-9]{3}\\) [0-9]{3}-[0-9]{4}$')]]
+      });
     }
     
     this.agencyId = this.authService.currentUserValue.agencyId;
@@ -255,9 +263,19 @@ export class CustomerComponent implements OnInit {
       customerAddress: this.address().value,
       customerPhone: this.phoneNumber().value
     }).subscribe(() => {
-      this.modalRef.close();
-      this.getCustomerById(this.customerId);
-      this.getTicketsByAgencyIdAndCustomerId(this.agencyId, this.customerId);
+      
+      if (this.role !== 'customer') {
+        this.getCustomerById(this.customerId);
+        this.modalRef.close();
+      } else {
+        this.authService.getCustomerByUserId(this.authService.currentUserValue.userId)
+        .subscribe((customer) => {
+          this.customer = customer;
+          this.modalRef.close();
+        })
+       
+      }
+      this.getTicketsByAgencyIdAndCustomerId(this.agencyId, (this.customerId || this.userCustomerId));
     });
   }
 
