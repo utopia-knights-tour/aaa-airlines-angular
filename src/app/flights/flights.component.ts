@@ -48,6 +48,7 @@ export class FlightsComponent implements OnInit {
 
     this.sub = this.route.params.subscribe((params) => {
       this.customerId = +params["customerId"];
+     
     });
 
 
@@ -101,6 +102,7 @@ export class FlightsComponent implements OnInit {
           this.flights = flights.map((flight) => {
             return {
               ...flight,
+              flightId: flight['id'],
               departureTime:
                 ("0" + flight.departureTime['hour']).slice(-2) +
                 ":" +

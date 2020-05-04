@@ -57,6 +57,28 @@ export class PaymentComponent implements OnInit {
           departureDate: flight.departureDate.substring(0, flight.departureDate.indexOf('T00:')),
         }
       }
+      if (this.authService.currentUserValue.role == 'agent') {
+        this.flight = {
+          ...flight,
+          flightId: this.flightId,
+          departureDate: Object.values(flight.departureDate).reverse().join('-')  ,
+          sourceAirport: flight.sourceAirport['code'],
+          destinationAirport: flight.destinationAirport['code'],
+          departureTime:
+                ("0" + flight.departureTime['hour']).slice(-2) +
+                ":" +
+                ("0" + flight.departureTime['minute']).slice(-2) +
+                ":" +
+                ("0" + flight.departureTime['second']).slice(-2),
+              arrivalTime:
+              ("0" + flight.arrivalTime['hour']).slice(-2) +
+              ":" +
+              ("0" + flight.arrivalTime['minute']).slice(-2) +
+              ":" +
+              ("0" + flight.arrivalTime['second']).slice(-2),
+
+        }
+      }
       this.paymentInfo = { ticketInfo: { flightId: this.flightId, customerId: (this.customerId || this.userCustomerId), agencyId: this.agencyId, amount: this.flight.cost * 100 }, paymentMethodId: null }
       console.log(this.paymentInfo);
     });
