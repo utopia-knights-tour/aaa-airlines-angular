@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
+import { Customer } from '../_models/customer';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,15 @@ export class CustomerService {
       }
     }
     return this.http.get(`${environment.apiUrl}/${this.authService.currentUserValue.role}/customers${queryString}`);
+  }
+
+  addCustomer(customer: Customer) {
+    return this.http.post(`${environment.apiUrl}/${this.authService.currentUserValue.role}/customers`, customer);
+  }
+
+  editCustomer(customer: Customer) {
+    return this.http.put(`${environment.apiUrl}/${this.authService.currentUserValue.role}/customers/
+    ${customer.customerId}`, customer);
   }
 
 }

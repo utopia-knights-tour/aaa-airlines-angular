@@ -9,6 +9,9 @@ import { PaymentService } from "../_services/payment.service";
 
 import { User } from "../_models/user";
 import { toJSDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-calendar';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { Customer } from '../_models/customer';
+import { PlatformLocation } from '@angular/common';
 
 @Component({
   selector: "app-customer",
@@ -22,11 +25,12 @@ export class CustomerComponent implements OnInit {
   role: string;
   userCustomerId: any;
 
-  customer: any;
+  customer: Customer;
   tickets: any;
   ticketsCount: number;
   selectedTicket: number;
   private modalRef: NgbModalRef;
+  editCustomerForm: FormGroup;
   errMsg: any;
   closeResult: any;
 
@@ -41,9 +45,11 @@ export class CustomerComponent implements OnInit {
     private ticketService: TicketService,
     private paymentService: PaymentService,
     private modalService: NgbModal,
+    private fb: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router
-  ) { }
+    private router: Router,
+    private location: PlatformLocation
+  ) {}
 
   ngOnInit() {
     this.sub = this.route.params.subscribe((params) => {
@@ -64,21 +70,41 @@ export class CustomerComponent implements OnInit {
     this.getTicketsByAgencyIdAndCustomerId(this.agencyId, this.customerId || this.userCustomerId);
  }
 
+  name() {
+    return this.editCustomerForm.get('name');
+  }
+
+  address() {
+    return this.editCustomerForm.get('address');
+  }
+
+  phoneNumber() {
+    return this.editCustomerForm.get('phoneNumber');
+  }
+
   getCustomerById(id: number) {
     this.loading = true;
     this.customerService.getCustomerById(id).subscribe(
-      (data) => {
+      (data: Customer) => {
         console.log(data);
         if (this.authService.currentUserValue.role === 'agent') {
           data = {
-            customerId: data.id,
-            customerName: data.name,
-            customerAddress: data.address,
-            customerPhone: data.phone
+            customerId: data['id'],
+            customerName: data['name'],
+            customerAddress: data['address'],
+            customerPhone: data['phone']
           }
         }
         this.loading = false;
         this.customer = data;
+        this.editCustomerForm = this.fb.group({
+          name: [this.customer.customerName,
+            [Validators.required, Validators.minLength(3), Validators.maxLength(45)]],
+          address: [this.customer.customerAddress,
+            [Validators.required, Validators.minLength(15), Validators.maxLength(50)]],
+          phoneNumber: [this.customer.customerPhone,
+            [Validators.required, Validators.pattern('^\\([0-9]{3}\\) [0-9]{3}-[0-9]{4}$')]]
+        });
       },
       (error) => {
         this.loading = false;
@@ -211,8 +237,28 @@ export class CustomerComponent implements OnInit {
     );
   }
 
+  openEditModal(content: any) {
+      this.modalRef = this.modalService.open(content);
+      this.location.onPopState(() => {
+        this.modalRef.close();
+      })
+  }
+
   changePage(event: Event) {
     this.getTicketsByAgencyIdAndCustomerId(this.agencyId, this.customerId);
+  }
+
+  onSubmitModal() {
+    this.customerService.editCustomer({
+      customerId: this.customer.customerId,
+      customerName: this.name().value,
+      customerAddress: this.address().value,
+      customerPhone: this.phoneNumber().value
+    }).subscribe(() => {
+      this.modalRef.close();
+      this.getCustomerById(this.customerId);
+      this.getTicketsByAgencyIdAndCustomerId(this.agencyId, this.customerId);
+    });
   }
 
 }
