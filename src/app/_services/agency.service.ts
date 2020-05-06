@@ -12,7 +12,7 @@ export class AgencyService {
     private authService: AuthService) { }
 
   getAgencies() {
-    return this.http.get(`${environment.apiUrl}/${this.authService.currentUserValue.role}/agencies`);
+    return this.http.get(`${environment.apiUrl}/agent/agencies`);
   }
   
   getAgencyById(id: number) {

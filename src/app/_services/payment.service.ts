@@ -9,12 +9,9 @@ export class PaymentService {
 
   constructor(private http: HttpClient) { }
 
-  cancelTicket(customerId, ticketId, agencyId) {
+  cancelTicket(ticketId) {
     return this.http.request('delete',
       `${environment.apiUrl}/payment/${ticketId}`,
-      {
-        body: { customerId, agencyId }
-      },
     )
   }
 

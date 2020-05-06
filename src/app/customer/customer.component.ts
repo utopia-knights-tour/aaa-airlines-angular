@@ -205,7 +205,7 @@ export class CustomerComponent implements OnInit {
 
   cancelReservation() {
     this.loading = true;
-    this.paymentService.cancelTicket(this.customerId || this.userCustomerId, this.selectedTicket, this.agencyId || null)
+    this.paymentService.cancelTicket(this.selectedTicket)
       .subscribe(
         (data) => {
           this.loading = false;
