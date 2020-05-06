@@ -73,6 +73,7 @@ export class CustomerComponent implements OnInit {
     this.role = this.authService.currentUserValue.role;
     
     if (!this.userCustomerId) {
+      
       this.getCustomerById(this.customerId);
     }
     this.getTicketsByAgencyIdAndCustomerId(this.agencyId, this.customerId || this.userCustomerId);
@@ -94,14 +95,7 @@ export class CustomerComponent implements OnInit {
     this.loading = true;
     this.customerService.getCustomerById(id).subscribe(
       (data: Customer) => {
-        if (this.authService.currentUserValue.role === 'agent') {
-          data = {
-            customerId: data['id'],
-            customerName: data['name'],
-            customerAddress: data['address'],
-            customerPhone: data['phone']
-          }
-        }
+        console.log(data);
         this.loading = false;
         this.customer = data;
         this.editCustomerForm = this.fb.group({
