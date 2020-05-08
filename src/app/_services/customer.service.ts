@@ -10,9 +10,9 @@ import { Customer } from '../_models/customer';
 export class CustomerService {
 
   constructor(private http: HttpClient, private authService: AuthService) { }
-
+  
   getCustomerById(id: number) {
-    return this.http.get(`${environment.apiUrl}/${this.authService.currentUserValue.role}/customers/${id}`)
+    return this.http.get<any>(`${environment.apiUrl}/${this.authService.currentUserValue.role}/customers/${id}`)
   }
 
   getCustomers(requestParams: Array<string>) {
@@ -34,8 +34,7 @@ export class CustomerService {
   }
 
   editCustomer(customer: Customer) {
-    return this.http.put(`${environment.apiUrl}/${this.authService.currentUserValue.role}/customers/
-    ${customer.customerId}`, customer);
+    return this.http.put(`${environment.apiUrl}/${this.authService.currentUserValue.role}/customers/${customer.customerId}`, customer);
   }
 
 }

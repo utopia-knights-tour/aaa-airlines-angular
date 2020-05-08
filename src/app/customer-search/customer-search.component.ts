@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CustomerService } from '../_services/customer.service';
 import { Router } from '@angular/router';
-import { StoreService } from '../_services/store.service';
 import { AuthService } from '../_services/auth.service';
 import { Customer } from '../_models/customer';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -28,7 +27,6 @@ export class CustomerSearchComponent implements OnInit {
 
   constructor(
     private customerService: CustomerService,
-    private storeService: StoreService,
     private authService: AuthService,
     private router: Router,
     private modalService: NgbModal,
@@ -47,6 +45,11 @@ export class CustomerSearchComponent implements OnInit {
     });
   }
 
+  addCustomer() {
+      
+  }
+
+  
   getCustomers() {
     this.loading = true;
     let requestParams = [];
@@ -80,9 +83,9 @@ export class CustomerSearchComponent implements OnInit {
   }
 
   getCustomerById(id: number) {
-      this.storeService.setStore({...this.storeService.getStore(), customerId: id});
-      this.router.navigate([`${this.authService.currentUserValue.role}/customer`]);
-  }
+      
+      this.router.navigate([`${this.authService.currentUserValue.role}/customer`, id, 'tickets']);
+    }
 
   changePage() {
     this.getCustomers();

@@ -27,7 +27,7 @@ export class NavbarComponent implements OnInit {
           route = ["/counter"];
           break;
         case "agent":
-          route = ["/agency", this.authService.currentUserValue.agencyId];
+          route = ["/agent"];
           break;
       }
     }
@@ -36,6 +36,10 @@ export class NavbarComponent implements OnInit {
 
   loggedIn() {
     return this.authService.currentUserValue;
+  }
+
+  isCustomer() {
+    return this.authService.currentUserValue.role === 'customer';
   }
 
   logout() {

@@ -38,9 +38,29 @@ const routes: Routes = [
     component: FlightsComponent,
   },
   {
-    path: "payment",
+    path: "flights/:flightId/payment",
     canActivate: [AuthGuard],
     component: PaymentComponent,
+  },
+  {
+    path: "tickets",
+    canActivate: [AuthGuard],
+    component: CustomerComponent,
+  },
+  {
+    path: "counter/customer/:customerId/flights/:flightId/payment",
+    canActivate: [AuthGuard, CounterGuard],
+    component: PaymentComponent,
+  },
+  {
+    path: "counter/customer/:customerId/flights",
+    canActivate: [AuthGuard, CounterGuard],
+    component: FlightsComponent,
+  },
+  {
+    path: "counter/customer/:customerId/tickets",
+    canActivate: [AuthGuard, CounterGuard],
+    component: CustomerComponent,
   },
   {
     path: "counter",
@@ -48,19 +68,24 @@ const routes: Routes = [
     component: CounterComponent,
   },
   {
-    path: "counter/customer",
-    canActivate: [AuthGuard, CounterGuard],
-    component: CustomerComponent,
-  },
-  {
-    path: "agency",
+    path: "agent",
     canActivate: [AuthGuard, AgencyGuard],
     component: AgencyComponent,
   },
   {
-    path: "agency/customer",
+    path: "agent/customer/:customerId/tickets",
     canActivate: [AuthGuard, AgencyGuard],
     component: CustomerComponent,
+  },
+  {
+    path: "agent/customer/:customerId/flights",
+    canActivate: [AuthGuard, AgencyGuard],
+    component: FlightsComponent,
+  },
+  {
+    path: "agent/customer/:customerId/flights/:flightId/payment",
+    canActivate: [AuthGuard, AgencyGuard],
+    component: PaymentComponent,
   },
   { path: "**", redirectTo: "/login" },
 ];

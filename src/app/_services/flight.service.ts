@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { environment } from 'src/environments/environment';
+import { Flight } from '../_models/flight';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,11 @@ export class FlightService {
         queryString += `&${requestParam[0]}=${requestParam[1]}`;
       }
     }
-    return this.http.get(`${environment.apiUrl}/${this.authService.currentUserValue.role}/flights${queryString}`);
+    return this.http.get<Flight[]>(`${environment.apiUrl}/${this.authService.currentUserValue.role}/flights${queryString}`);
+  }
+
+  getFlightById(flightId) {
+    return this.http.get<Flight>(`${environment.apiUrl}/${this.authService.currentUserValue.role}/flights/${flightId}`)
   }
 
 }

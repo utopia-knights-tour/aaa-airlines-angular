@@ -67,7 +67,7 @@
           <p class="font-weight-bold d-inline h3">
             ${{ flight.cost }}
           </p>
-          <button routerLink='/payment'  (click)="selectFlight(flight)" routerLinkActive="active" class="btn btn-m btn-primary float-right">
+          <button (click)="selectFlight(flight.flightId || flight.id)" class="btn btn-m btn-primary float-right">
             Select
           </button>
         </div>

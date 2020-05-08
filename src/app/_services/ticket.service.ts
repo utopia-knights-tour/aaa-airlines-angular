@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: "root",
@@ -11,8 +12,9 @@ export class TicketService {
 
   getTicketsByCustomerId(customerId: number, requestParams: Array<string>) {
     let queryString = "";
+    queryString += `?customerId=${customerId}`
     if (requestParams && requestParams.length) {
-      queryString += "?";
+      queryString += '&'
       let requestParam = Object.entries(requestParams[0])[0];
       queryString += `${requestParam[0]}=${requestParam[1]}`;
       for (let i = 1; i < requestParams.length; i++) {
@@ -20,11 +22,15 @@ export class TicketService {
         queryString += `&${requestParam[0]}=${requestParam[1]}`;
       }
     }
-    return this.http.get(
-      //change this
-      `${environment.apiUrl}/${this.authService.currentUserValue.role}/tickets${queryString}&customerId=${customerId}`
-    );
-  }
+    
+    
+    
+    
+    return this.http.get<any>(
+  
+      `${environment.apiUrl}/${this.authService.currentUserValue.role}/tickets${queryString}`
+    )
+}
 
   getTicketsByAgencyIdAndCustomerId(agencyId: number, customerId: number, requestParams: Array<string>) {
     let queryString = "";
@@ -38,7 +44,7 @@ export class TicketService {
       }
     }
     return this.http.get(
-      `https://g0jb7m2tlk.execute-api.us-east-2.amazonaws.com/dev/tickets/agency/${agencyId}/customer/${customerId}${queryString}`
+      `${environment.apiUrl}/${this.authService.currentUserValue.role}/tickets/agency/${agencyId}/customer/${customerId}${queryString}`
     );
   }
 }

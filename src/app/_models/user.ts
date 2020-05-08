@@ -1,3 +1,5 @@
+import { Customer } from './customer';
+
 export class User {
     userId: number;
     email: string;
@@ -6,5 +8,5 @@ export class User {
     name: string;
     token: string;
     agencyId?
-    customerId?;
+    customer?: Customer;
 }
