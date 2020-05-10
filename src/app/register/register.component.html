@@ -1,9 +1,9 @@
-<h2>Register</h2>
+<h2 class="mt-4 mb-3">Register</h2>
 <ul ngbNav #nav="ngbNav" class="nav-tabs">
     <li ngbNavItem>
       <a ngbNavLink>As Customer</a>
       <ng-template ngbNavContent>
-        <form [formGroup]="registerCustomerForm" (ngSubmit)="onCustomerSubmit()">
+        <form [formGroup]="registerCustomerForm" (ngSubmit)="onCustomerSubmit()" class="mt-3 mb-3">
             <div class="form-group">
                 <label for="customerName">Name</label>
                 <input type="text" formControlName="customerName" class="form-control" [ngClass]="{ 'is-invalid': rcfSubmitted && rcf.customerName.errors }" />
@@ -42,7 +42,7 @@
                     <div *ngIf="rcf.password.errors.minlength">Password must be at least 6 characters</div>
                 </div>
             </div>
-            
+
             <div class="form-group">
                 <button [disabled]="loading" class="btn btn-primary">
                     <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
@@ -56,7 +56,7 @@
     <li ngbNavItem>
       <a ngbNavLink>As Agent</a>
       <ng-template ngbNavContent>
-        <form [formGroup]="registerAgentForm" (ngSubmit)="onAgentSubmit()">
+        <form [formGroup]="registerAgentForm" (ngSubmit)="onAgentSubmit()" class="mt-3 mb-3">
             <div class="form-group">
                 <label for="agencyId">Agency</label>
                 <select formControlName="agencyId" class="form-control" [ngClass]="{ 'is-invalid': rafSubmitted && raf.agencyId.errors }" >
@@ -64,7 +64,7 @@
                     <option *ngFor="let agency of agencies" [ngValue]="agency.id">
                      {{ agency.name }}
                     </option>
-                </select> 
+                </select>
                 <div *ngIf="rafSubmitted && raf.agencyId.errors" class="invalid-feedback d-block">
                     <div *ngIf="raf.agencyId.errors.required">Agency is required</div>
                 </div>

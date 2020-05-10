@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { AirportService } from '../_services/airport.service';
 import { Airport } from '../_models/airport';
 import { AuthService } from '../_services/auth.service';
-import { User } from '../_models/user';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { FlightService } from '../_services/flight.service';
 import { Flight } from '../_models/flight';
@@ -15,11 +14,11 @@ import { NgbDateFormatterService } from '../_services/ngb-date-formatter.service
   styleUrls: ['./flights.component.css']
 })
 export class FlightsComponent implements OnInit {
-  private sub: any;
+
   customerId: number;
   userCustomerId: number;
   flightForm: FormGroup;
-  airports: [Airport];
+  airports: Airport[];
   flights: Flight[];
   errorMessage: string;
   page = 1;
@@ -31,26 +30,22 @@ export class FlightsComponent implements OnInit {
     private flightService: FlightService,
     private authService: AuthService,
     private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
     private router: Router,
+    private route: ActivatedRoute,
     private dateFormatter: NgbDateFormatterService) { }
 
   ngOnInit(): void {
 
-    this.sub = this.route.params.subscribe((params) => {
+    this.route.params.subscribe((params) => {
       this.customerId = +params["customerId"];
-     
     });
 
-
-    this.loading = true;
     this.airportService.getAirports().subscribe((airports: [Airport]) => {
-      this.loading = false;
       this.airports = airports;
-    }, (err) => {
-      this.loading = false;
-      this.errorMessage = err.message;
+    }, () => {
+      this.errorMessage = "Error loading airports."
     });
+
     this.flightForm = this.formBuilder.group({
       originCode: [null, Validators.required],
       destinationCode: [null, Validators.required],
@@ -62,22 +57,23 @@ export class FlightsComponent implements OnInit {
     });
   }
 
-  originCode() {
+  get originCode() {
     return this.flightForm.get('originCode');
   }
 
-  destinationCode() {
+  get destinationCode() {
     return this.flightForm.get('destinationCode');
   }
 
-  departureDate() {
+  get departureDate() {
     return this.flightForm.get('departureDate');
   }
 
-  onFlightSubmit() {
-    const originCode = this.originCode().value;
-    const destinationCode = this.destinationCode().value;
-    const departureDate = this.dateFormatter.format(this.flightForm.get('departureDate').value);
+  getFlights() {
+    this.loading = true;
+    const originCode = this.originCode.value;
+    const destinationCode = this.destinationCode.value;
+    const departureDate = this.dateFormatter.format(this.departureDate.value);
     // Set up query params for AJAX call.
     let requestParams = [];
     requestParams.push({ originCode });
@@ -85,7 +81,7 @@ export class FlightsComponent implements OnInit {
     requestParams.push({ departureDate });
     // Call to flights service to list all the flights.
     this.flightService.getFlights(requestParams)
-      .subscribe((flights) => {
+      .subscribe((flights: Flight[]) => {
         this.loading = false;
         if (this.authService.currentUserValue.role === 'agent') {
           this.flights = flights.map((flight) => {
@@ -105,17 +101,13 @@ export class FlightsComponent implements OnInit {
               ":" +
               ("0" + flight.arrivalTime['second']).slice(-2),
             }
-          })
-        }
-        else {
+          });
+        } else {
           this.flights = flights;
-        } 
-        
-
-        
-      }, (err) => {
+        }
+      }, () => {
         this.loading = false;
-        this.errorMessage = err.message;
+        this.errorMessage = "Error loading flights."
       });
   }
 
@@ -140,7 +132,7 @@ export class FlightsComponent implements OnInit {
     return { invalidDate: true };
   }
 
-  selectFlight(flightId) {
+  selectFlight(flightId: number) {
     const routes = {
       counter: ['counter/customer', this.customerId, 'flights', flightId, 'payment'],
       agent: ['agent/customer', this.customerId, 'flights', flightId, 'payment'],

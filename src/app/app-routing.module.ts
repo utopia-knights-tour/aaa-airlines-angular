@@ -1,7 +1,6 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 
-import { HomeComponent } from "./home/home.component";
 import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
 import { CounterComponent } from "./counter/counter.component";
@@ -18,11 +17,7 @@ import { AgencyGuard } from "./_guards/agency.guard";
 const routes: Routes = [
   {
     path: "",
-    component: HomeComponent,
-  },
-  {
-    path: "home",
-    component: HomeComponent,
+    redirectTo: "login",
   },
   {
     path: "login",

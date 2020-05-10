@@ -1,4 +1,4 @@
-<div *ngIf="flight">
+<div *ngIf="flight" class="mt-4 mb-3">
   <div class="card">
     <div class="card-body">
       <div class="card-block">
@@ -22,10 +22,12 @@
     </div>
   </div>
 </div>
+<h3 class="mb-3">Card Info</h3>
+<div class="alert alert-danger" *ngIf="result">{{ result }}</div>
 <form novalidate (ngSubmit)="pay()">
   <div id="card-element" class="field"></div>
-  <button class="btn btn-primary" type="submit">
+  <button class="btn bnt-lg btn-primary mt-3" type="submit" [disabled]="loading">
+    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
     PAY
   </button>
 </form>
-<div id="result" *ngIf="result">{{ result }}</div>

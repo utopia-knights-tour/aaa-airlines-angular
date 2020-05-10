@@ -9,7 +9,6 @@ import { NgxStripeModule } from 'ngx-stripe';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { AgencyComponent } from './agency/agency.component';
@@ -35,7 +34,6 @@ import { CustomerSearchComponent } from './customer-search/customer-search.compo
   declarations: [
     AppComponent,
     NavbarComponent,
-    HomeComponent,
     LoginComponent,
     RegisterComponent,
     AgencyComponent,

@@ -25,8 +25,8 @@ export class PaymentComponent implements OnInit {
   userCustomerId: any;
   redirects: any;
   role: string;
-  private sub: any;
   flightId: any;
+  loading = false;
 
   constructor(
     private stripeService: StripeService,
@@ -38,11 +38,11 @@ export class PaymentComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.sub = this.route.params.subscribe((params) => {
+    this.route.params.subscribe((params) => {
       this.flightId = +params["flightId"];
       this.customerId = +params["customerId"];
     });
-    console.log(this.authService.currentUserValue)
+
     if (!this.customerId) {
       this.userCustomerId = this.authService.currentUserValue.customer.customerId;
     }
@@ -60,7 +60,7 @@ export class PaymentComponent implements OnInit {
         this.flight = {
           ...flight,
           flightId: this.flightId,
-          departureDate: Object.values(flight.departureDate).reverse().join('-')  ,
+          departureDate: Object.values(flight.departureDate).reverse().join('-'),
           sourceAirport: flight.sourceAirport['code'],
           destinationAirport: flight.destinationAirport['code'],
           departureTime:
@@ -112,6 +112,7 @@ export class PaymentComponent implements OnInit {
   }
 
   pay() {
+    this.loading = true;
     const paymentInfo = this.paymentInfo;
     this.stripeService
       .createPaymentMethod('card', this.card)
@@ -120,17 +121,20 @@ export class PaymentComponent implements OnInit {
         if (paymentMethod) {
           paymentInfo.paymentMethodId = paymentMethod.id;
           this.paymentService.makePayment(paymentInfo)
-            .subscribe(result => {
-              this.result = 'PAYMENT SUCCEDED';
+            .subscribe(() => {
+              this.loading = false;
+              this.result = 'Payment successful.';
               this.redirect();
             }, err => {
+              this.loading = false;
               console.log(err);
-              this.result = 'PAYMENT FAILED';
+              this.result = 'Payment failed.';
             })
         }
       }, err => {
+        this.loading = false;
         console.log(err);
-        this.result = 'PAYMENT FAILED';
+        this.result = 'Payment failed.';
       });
   }
 
