@@ -1,4 +1,7 @@
-<h2>Login</h2>
+<h2 class="mt-4 mb-3">Login</h2>
+<div *ngIf="errorMessage" class="alert alert-danger">
+  {{ errorMessage }}
+</div>
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
         <label for="email">Email</label>

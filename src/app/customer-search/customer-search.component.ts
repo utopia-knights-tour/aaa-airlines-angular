@@ -45,11 +45,6 @@ export class CustomerSearchComponent implements OnInit {
     });
   }
 
-  addCustomer() {
-      
-  }
-
-  
   getCustomers() {
     this.loading = true;
     let requestParams = [];
@@ -83,7 +78,7 @@ export class CustomerSearchComponent implements OnInit {
   }
 
   getCustomerById(id: number) {
-      
+
       this.router.navigate([`${this.authService.currentUserValue.role}/customer`, id, 'tickets']);
     }
 
@@ -96,7 +91,7 @@ export class CustomerSearchComponent implements OnInit {
     this.location.onPopState(() => this.modalRef.close());
   }
 
-  onSubmitModal() {
+  addCustomer() {
     this.customerService.addCustomer({
       customerName: this.name().value,
       customerAddress: this.address().value,

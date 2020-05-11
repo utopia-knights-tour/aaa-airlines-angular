@@ -12,21 +12,17 @@ import { AuthService } from '../_services/auth.service';
 })
 export class AgencyComponent implements OnInit {
 
-  private sub: any;
   agencyId: number;
   agency: any;
   loading = false;
 
   constructor(
     private agencyService: AgencyService,
-    private customerService: CustomerService,
-    private authService: AuthService,
-    private route: ActivatedRoute,
-    private router: Router
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
-   
+
     ({ agencyId: this.agencyId } = this.authService.currentUserValue);
     this.getAgencyById(this.agencyId);
   }

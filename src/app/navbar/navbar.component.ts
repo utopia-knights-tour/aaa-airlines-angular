@@ -9,12 +9,15 @@ import { AuthService } from "../_services/auth.service";
   styleUrls: ["./navbar.component.css"],
 })
 export class NavbarComponent implements OnInit {
+
+  navbarOpen = false;
+
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {}
 
   home() {
-    let route = ["/"];
+    let route = ["/login"];
     if (
       this.authService.currentUserValue &&
       this.authService.currentUserValue.role
@@ -32,6 +35,10 @@ export class NavbarComponent implements OnInit {
       }
     }
     this.router.navigate(route);
+  }
+
+  toggleNavbar() {
+    this.navbarOpen = !this.navbarOpen;
   }
 
   loggedIn() {

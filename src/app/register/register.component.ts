@@ -36,7 +36,7 @@ export class RegisterComponent implements OnInit {
       customerAddress: ["", Validators.required],
       customerPhone: [
         "",
-        [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")],
+        [Validators.required, Validators.pattern('^\\([0-9]{3}\\) [0-9]{3}-[0-9]{4}$')],
       ],
       email: ["", [Validators.required, Validators.email]],
       password: ["", [Validators.required, Validators.minLength(6)]],

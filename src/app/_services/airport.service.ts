@@ -13,5 +13,4 @@ export class AirportService {
   getAirports() {
     return this.http.get(`${environment.apiUrl}/${this.authService.currentUserValue.role}/airports`);
   }
-
 }

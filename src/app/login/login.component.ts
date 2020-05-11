@@ -11,6 +11,7 @@ export class LoginComponent implements OnInit {
   loading = false;
   submitted = false;
   returnUrl: string;
+  errorMessage: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -69,6 +70,7 @@ export class LoginComponent implements OnInit {
         },
         (error) => {
           this.loading = false;
+          this.errorMessage = "Username or password is incorrect."
         }
       );
   }
