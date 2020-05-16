@@ -5,7 +5,6 @@ import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment'
 
 import { User } from '../_models/user';
-import { Customer } from '../_models/customer';
 
 @Injectable({
     providedIn: 'root'
@@ -48,7 +47,7 @@ export class AuthService {
             .pipe(map(customer => {
                 localStorage.setItem('currentUser', JSON.stringify({ ...this.currentUserValue, customer }));
                 this.currentUserSubject.next({ ...this.currentUserValue, customer });
-                return customer;;
+                return customer;
             }));
     }
 }

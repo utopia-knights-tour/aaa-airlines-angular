@@ -82,7 +82,7 @@ export class PaymentComponent implements OnInit {
     });
 
     this.redirects = {
-      agent: ['/agency/customer', this.customerId, 'tickets'],
+      agent: ['/agent/customer', this.customerId, 'tickets'],
       counter: ['/counter/customer', this.customerId, 'tickets'],
       customer: ['/tickets']
     }

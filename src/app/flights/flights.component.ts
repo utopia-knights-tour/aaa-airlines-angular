@@ -16,39 +16,45 @@ import { NgbDateFormatterService } from '../_services/ngb-date-formatter.service
 export class FlightsComponent implements OnInit {
 
   customerId: number;
-  userCustomerId: number;
   flightForm: FormGroup;
   airports: Airport[];
   flights: Flight[];
   errorMessage: string;
+  currentOrigin: Airport;
+  currentDestination: Airport;
+  currentFlightDate: string;
+  role: string;
   page = 1;
   pageSize = 10;
-  loading = false;
+  airportsLoading = false;
+  flightsLoading = false;
 
   constructor(
     private airportService: AirportService,
     private flightService: FlightService,
     private authService: AuthService,
     private formBuilder: FormBuilder,
-    private router: Router,
     private route: ActivatedRoute,
     private dateFormatter: NgbDateFormatterService) { }
 
   ngOnInit(): void {
-
+    this.airportsLoading = true;
+    this.role = this.authService.currentUserValue.role;
     this.route.params.subscribe((params) => {
       this.customerId = +params["customerId"];
     });
 
     this.airportService.getAirports().subscribe((airports: [Airport]) => {
       this.airports = airports;
+      this.airportsLoading = false;
     }, () => {
       this.errorMessage = "Error loading airports."
+      this.airportsLoading = false;
     });
 
     this.flightForm = this.formBuilder.group({
-      originCode: [null, Validators.required],
-      destinationCode: [null, Validators.required],
+      origin: [null, Validators.required],
+      destination: [null, Validators.required],
       departureDate: [null,
         [Validators.required, this.checkIfDateIsValid]
       ],
@@ -57,12 +63,12 @@ export class FlightsComponent implements OnInit {
     });
   }
 
-  get originCode() {
-    return this.flightForm.get('originCode');
+  get origin() {
+    return this.flightForm.get('origin');
   }
 
-  get destinationCode() {
-    return this.flightForm.get('destinationCode');
+  get destination() {
+    return this.flightForm.get('destination');
   }
 
   get departureDate() {
@@ -70,11 +76,12 @@ export class FlightsComponent implements OnInit {
   }
 
   getFlights() {
-    this.loading = true;
-    const originCode = this.originCode.value;
-    const destinationCode = this.destinationCode.value;
+    this.flightsLoading = true;
+    this.errorMessage = null;
+    const originCode = this.origin.value.airportCode;
+    const destinationCode = this.destination.value.airportCode;
     const departureDate = this.dateFormatter.format(this.departureDate.value);
-    // Set up query params for AJAX call.
+    // Set up query params
     let requestParams = [];
     requestParams.push({ originCode });
     requestParams.push({ destinationCode });
@@ -82,39 +89,46 @@ export class FlightsComponent implements OnInit {
     // Call to flights service to list all the flights.
     this.flightService.getFlights(requestParams)
       .subscribe((flights: Flight[]) => {
-        this.loading = false;
-        if (this.authService.currentUserValue.role === 'agent') {
-          this.flights = flights.map((flight) => {
-            return {
-              ...flight,
-              flightId: flight['id'],
-              departureTime:
-                ("0" + flight.departureTime['hour']).slice(-2) +
-                ":" +
-                ("0" + flight.departureTime['minute']).slice(-2) +
-                ":" +
-                ("0" + flight.departureTime['second']).slice(-2),
-              arrivalTime:
-              ("0" + flight.arrivalTime['hour']).slice(-2) +
-              ":" +
-              ("0" + flight.arrivalTime['minute']).slice(-2) +
-              ":" +
-              ("0" + flight.arrivalTime['second']).slice(-2),
-            }
-          });
-        } else {
-          this.flights = flights;
-        }
+        this.flightsLoading = false;
+        this.flights = flights;
       }, () => {
-        this.loading = false;
+        this.flightsLoading = false;
+        this.flights = null;
         this.errorMessage = "Error loading flights."
+      });
+    // Variables used for user reloads.
+    this.currentOrigin = this.origin.value;
+    this.currentDestination = this.destination.value;
+    this.currentFlightDate = departureDate;
+  }
+
+  reloadFlights() {
+    this.flightsLoading = true;
+    this.errorMessage = null;
+    const originCode = this.currentOrigin.airportCode;
+    const destinationCode = this.currentDestination.airportCode;
+    const departureDate = this.currentFlightDate;
+    // Set up query params
+    let requestParams = [];
+    requestParams.push({ originCode });
+    requestParams.push({ destinationCode });
+    requestParams.push({ departureDate });
+    // Call to flights service to reload all the flights.
+    this.flightService.getFlights(requestParams)
+      .subscribe((flights: Flight[]) => {
+        this.flightsLoading = false;
+        this.flights = flights;
+      }, () => {
+        this.flightsLoading = false;
+        this.flights = null;
+        this.errorMessage = "Error reloading flights."
       });
   }
 
   checkIfAirportsNotEqual(c: AbstractControl) {
-    let originCode = c.get('originCode').value;
-    let destinationCode = c.get('destinationCode').value;
-    if (!originCode || !destinationCode || originCode != destinationCode) {
+    let origin = c.get("origin").value;
+    let destination = c.get("destination").value;
+    if (!origin || !destination || origin != destination) {
       return null;
     }
     return { invalidTrip: true };
@@ -130,16 +144,6 @@ export class FlightsComponent implements OnInit {
       }
     }
     return { invalidDate: true };
-  }
-
-  selectFlight(flightId: number) {
-    const routes = {
-      counter: ['counter/customer', this.customerId, 'flights', flightId, 'payment'],
-      agent: ['agent/customer', this.customerId, 'flights', flightId, 'payment'],
-      customer: ['flights', flightId, 'payment']
-    }
-
-    this.router.navigate(routes[this.authService.currentUserValue.role]);
   }
 
 }

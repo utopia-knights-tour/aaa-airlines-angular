@@ -42,11 +42,11 @@
       </li>
       <li *ngIf="loggedIn()" class="nav-item">
         <a
-        [routerLink]="['login']"
         id="logout-link"
+        [routerLink]="['login']"
         (click)="logout()"
         class="nav-link"
-        [ngClass]="{ 'logout-link': !navbarOpen }">
+        >
           Logout <span class="sr-only">(current)</span>
         </a>
       </li>

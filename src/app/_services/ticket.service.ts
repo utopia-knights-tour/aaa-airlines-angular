@@ -22,14 +22,10 @@ export class TicketService {
         queryString += `&${requestParam[0]}=${requestParam[1]}`;
       }
     }
-    
-    
-    
-    
+
     return this.http.get<any>(
-  
       `${environment.apiUrl}/${this.authService.currentUserValue.role}/tickets${queryString}`
-    )
+    );
 }
 
   getTicketsByAgencyIdAndCustomerId(agencyId: number, customerId: number, requestParams: Array<string>) {
@@ -43,6 +39,7 @@ export class TicketService {
         queryString += `&${requestParam[0]}=${requestParam[1]}`;
       }
     }
+
     return this.http.get(
       `${environment.apiUrl}/${this.authService.currentUserValue.role}/tickets/agency/${agencyId}/customer/${customerId}${queryString}`
     );
