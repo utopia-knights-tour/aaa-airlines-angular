@@ -1,33 +1,9 @@
-<div *ngIf="flight" class="mt-4 mb-3">
-  <div class="card">
-    <div class="card-body">
-      <div class="card-block">
-        <h5 class="card-title"> {{ flight.sourceAirport.airportCode || flight.sourceAirport }} - {{ flight.destinationAirport.airportCode || flight.destinationAirport }}</h5>
-        <div class="card-text">
-          Flight {{ flight.flightId }}
-        </div>
-        <div class="card-text">
-          {{ flight.departureDate }} {{ flight.departureTime }}-{{ flight.arrivalTime }} UTC
-        </div>
-        <div class="card-text">
-          <p class="font-weight-bold d-inline h5">
-            total : ${{ flight.cost }}
-          </p>
-
-        </div>
-        <div class="card-text">
-
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="mt-4 mb-3">
+  <app-flight-card [flight]="flight" [purchaseMode]="true"></app-flight-card>
 </div>
 <h3 class="mb-3">Card Info</h3>
 <div class="alert alert-danger" *ngIf="result">{{ result }}</div>
 <form novalidate (ngSubmit)="pay()">
   <div id="card-element" class="field"></div>
-  <button class="btn bnt-lg btn-primary mt-3" type="submit" [disabled]="loading">
-    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-    PAY
-  </button>
+  <app-button [loading]="loading" [buttonText]="'Purchase Ticket'"></app-button>
 </form>

@@ -29,6 +29,11 @@ import { CounterComponent } from './counter/counter.component';
 
 import { JwtInterceptor } from './_helpers/jwt.interceptor';
 import { CustomerSearchComponent } from './customer-search/customer-search.component';
+import { CustomerCardComponent } from './customer-card/customer-card.component';
+import { TicketsComponent } from './tickets/tickets.component';
+import { FlightCardComponent } from './flight-card/flight-card.component';
+import { SpinnerComponent } from './spinner/spinner.component';
+import { ButtonComponent } from './button/button.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +46,12 @@ import { CustomerSearchComponent } from './customer-search/customer-search.compo
     CustomerComponent,
     FlightsComponent,
     CounterComponent,
-    CustomerSearchComponent
+    CustomerSearchComponent,
+    CustomerCardComponent,
+    TicketsComponent,
+    FlightCardComponent,
+    SpinnerComponent,
+    ButtonComponent
   ],
   imports: [
     BrowserModule,
