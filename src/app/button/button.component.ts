@@ -7,6 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class ButtonComponent {
 
+  @Input() disabled: boolean;
   @Input() loading: boolean;
   @Input() buttonText: string
 

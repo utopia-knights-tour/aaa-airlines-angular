@@ -19,7 +19,11 @@
         </div>
     </div>
     <div class="form-group">
-        <app-button [loading]="loading" [buttonText]="'Login'"></app-button>
+        <app-button
+        [loading]="loading"
+        [buttonText]="'Login'"
+        [disabled]="loading"
+        ></app-button>
         <a routerLink="/register" class="btn btn-link">Register</a>
     </div>
 </form>

@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import '@angular/localize/init';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxStripeModule } from 'ngx-stripe';
 
@@ -34,6 +34,7 @@ import { TicketsComponent } from './tickets/tickets.component';
 import { FlightCardComponent } from './flight-card/flight-card.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { ButtonComponent } from './button/button.component';
+import { CustomerModalComponent } from './customer-modal/customer-modal.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { ButtonComponent } from './button/button.component';
     TicketsComponent,
     FlightCardComponent,
     SpinnerComponent,
-    ButtonComponent
+    ButtonComponent,
+    CustomerModalComponent
   ],
   imports: [
     BrowserModule,
@@ -70,6 +72,7 @@ import { ButtonComponent } from './button/button.component';
     AirportService,
     FlightService,
     NgbDateFormatterService,
+    NgbActiveModal,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]

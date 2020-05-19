@@ -81,7 +81,10 @@
         >
           Back
         </button>
-        <app-button [loading]="cancelLoading" [buttonText]="'Cancel Reservation'"></app-button>
+        <app-button
+        [disabled]="cancelLoading"
+        [loading]="cancelLoading"
+        [buttonText]="'Cancel Reservation'"></app-button>
       </div>
     </div>
   </div>

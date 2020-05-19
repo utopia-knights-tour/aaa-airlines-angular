@@ -5,5 +5,9 @@
 <div class="alert alert-danger" *ngIf="result">{{ result }}</div>
 <form novalidate (ngSubmit)="pay()">
   <div id="card-element" class="field"></div>
-  <app-button [loading]="loading" [buttonText]="'Purchase Ticket'"></app-button>
+  <app-button
+  [disabled]="loading"
+  [loading]="loading"
+  [buttonText]="'Purchase Ticket'"
+  ></app-button>
 </form>
