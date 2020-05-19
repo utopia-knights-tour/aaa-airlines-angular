@@ -117,9 +117,11 @@ export class PaymentComponent implements OnInit {
     this.stripeService
       .createPaymentMethod('card', this.card)
       .subscribe(result => {
+        this.loading = false
         const { paymentMethod } = result;
         if (paymentMethod) {
           paymentInfo.paymentMethodId = paymentMethod.id;
+          this.loading = true;
           this.paymentService.makePayment(paymentInfo)
             .subscribe(() => {
               this.loading = false;
