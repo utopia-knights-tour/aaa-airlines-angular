@@ -84,7 +84,9 @@
         <app-button
         [disabled]="cancelLoading"
         [loading]="cancelLoading"
-        [buttonText]="'Cancel Reservation'"></app-button>
+        [buttonText]="'Cancel Reservation'"
+        (click)="cancelReservation()"
+        ></app-button>
       </div>
     </div>
   </div>
