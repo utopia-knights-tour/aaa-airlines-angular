@@ -3,8 +3,6 @@ import { CustomerService } from '../_services/customer.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../_services/auth.service';
 import { Customer } from '../_models/customer';
-import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { PlatformLocation } from '@angular/common';
 import { Subject } from 'rxjs';
 
 @Component({
@@ -27,10 +25,7 @@ export class CustomerSearchComponent implements OnInit {
   constructor(
     private customerService: CustomerService,
     private authService: AuthService,
-    private router: Router,
-    private modalService: NgbModal,
-    private activeModal: NgbActiveModal,
-    private location: PlatformLocation
+    private router: Router
   ) {
 
   }
