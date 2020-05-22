@@ -1,0 +1,36 @@
+<div *ngIf="errorMessage" class="alert alert-danger">
+  {{ errorMessage }}
+</div>
+
+<div *ngIf="loading; then Spinner else CustomerCard"></div>
+<ng-template #CustomerCard>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="card-block">
+        <button class="btn btn-outline-success mb-2" (click)="openModal()">
+          Edit
+        </button>
+        <h5 class="card-title">{{ customer.customerName }}</h5>
+        <div class="card-text">
+          {{ customer.customerAddress }}
+        </div>
+        <div class="card-text">
+          {{ customer.customerPhone }}
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #Spinner>
+  <app-spinner [loading]="loading"></app-spinner>
+</ng-template>
+
+<div *ngIf="customer">
+  <app-customer-modal
+  [editMode]="true"
+  [customer]="customer"
+  [openModal]="modalSubject.asObservable()"
+  (submitModal)="customer = $event">
+  </app-customer-modal>
+</div>

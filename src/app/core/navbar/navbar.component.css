@@ -1,0 +1,15 @@
+.nav-item .nav-link:hover, .navbar-light .navbar-brand:hover {
+  color: black;
+}
+
+.nav-item .nav-link, .navbar-light .navbar-brand, .navbar-light .navbar-brand:active {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+@media only screen and (min-width: 992px) {
+  #logout-link {
+    position: absolute;
+    right: 20px;
+  }
+}

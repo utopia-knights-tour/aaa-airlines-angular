@@ -1,17 +1,12 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 
-import { LoginComponent } from "./login/login.component";
-import { RegisterComponent } from "./register/register.component";
-import { CounterComponent } from "./counter/counter.component";
-import { AgencyComponent } from "./agency/agency.component";
-import { CustomerComponent } from "./customer/customer.component";
-import { PaymentComponent } from "./payment/payment.component";
-import { FlightsComponent } from "./flights/flights.component";
-
-import { AuthGuard } from "./_guards/auth.guard";
-import { CounterGuard } from "./_guards/counter.guard";
-import { AgencyGuard } from "./_guards/agency.guard";
+import { LoginComponent } from "./core/login/login.component";
+import { RegisterComponent } from "./core/register/register.component";
+import { NotFoundComponent } from './core/not-found/not-found.component';
+import { AgencyGuard } from './_guards/agency.guard';
+import { AuthGuard } from './_guards/auth.guard';
+import { CounterGuard } from './_guards/counter.guard';
 
 
 const routes: Routes = [
@@ -29,61 +24,21 @@ const routes: Routes = [
     component: RegisterComponent,
   },
   {
-    path: "flights",
-    canActivate: [AuthGuard],
-    component: FlightsComponent,
-  },
-  {
-    path: "flights/:flightId/payment",
-    canActivate: [AuthGuard],
-    component: PaymentComponent,
-  },
-  {
-    path: "tickets",
-    canActivate: [AuthGuard],
-    component: CustomerComponent,
-  },
-  {
-    path: "counter/customer/:customerId/flights/:flightId/payment",
-    canActivate: [AuthGuard, CounterGuard],
-    component: PaymentComponent,
-  },
-  {
-    path: "counter/customer/:customerId/flights",
-    canActivate: [AuthGuard, CounterGuard],
-    component: FlightsComponent,
-  },
-  {
-    path: "counter/customer/:customerId/tickets",
-    canActivate: [AuthGuard, CounterGuard],
-    component: CustomerComponent,
+    path: "customer",
+    loadChildren: () => import("./customer/customer.module").then(m => m.CustomerModule),
+    canLoad: [AuthGuard]
   },
   {
     path: "counter",
-    canActivate: [AuthGuard, CounterGuard],
-    component: CounterComponent,
+    loadChildren: () => import("./counter/counter.module").then(m => m.CounterModule),
+    canLoad: [CounterGuard]
   },
   {
     path: "agent",
-    canActivate: [AuthGuard, AgencyGuard],
-    component: AgencyComponent,
+    loadChildren: () => import("./agent/agent.module").then(m => m.AgentModule),
+    canLoad: [AgencyGuard]
   },
-  {
-    path: "agent/customer/:customerId/tickets",
-    canActivate: [AuthGuard, AgencyGuard],
-    component: CustomerComponent,
-  },
-  {
-    path: "agent/customer/:customerId/flights",
-    canActivate: [AuthGuard, AgencyGuard],
-    component: FlightsComponent,
-  },
-  {
-    path: "agent/customer/:customerId/flights/:flightId/payment",
-    canActivate: [AuthGuard, AgencyGuard],
-    component: PaymentComponent,
-  },
-  { path: "**", redirectTo: "/login" },
+  { path: "**", component: NotFoundComponent }
 ];
 
 @NgModule({

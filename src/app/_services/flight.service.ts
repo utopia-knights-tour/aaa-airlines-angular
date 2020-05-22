@@ -25,7 +25,7 @@ export class FlightService {
     return this.http.get<Flight[]>(`${environment.apiUrl}/${this.authService.currentUserValue.role}/flights${queryString}`);
   }
 
-  getFlightById(flightId) {
+  getFlightById(flightId: number) {
     return this.http.get<Flight>(`${environment.apiUrl}/${this.authService.currentUserValue.role}/flights/${flightId}`)
   }
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 import { Customer } from '../_models/customer';
@@ -10,7 +10,7 @@ import { Customer } from '../_models/customer';
 export class CustomerService {
 
   constructor(private http: HttpClient, private authService: AuthService) { }
-  
+
   getCustomerById(id: number) {
     return this.http.get<any>(`${environment.apiUrl}/${this.authService.currentUserValue.role}/customers/${id}`)
   }

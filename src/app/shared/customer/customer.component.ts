@@ -1,8 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { AuthService } from "../_services/auth.service";
-import { CustomerService } from "../_services/customer.service";
-import { Customer } from '../_models/customer';
+import { AuthService } from "../../_services/auth.service";
+import { Customer } from '../../_models/customer';
 
 @Component({
   selector: "app-customer",
@@ -41,7 +40,7 @@ export class CustomerComponent implements OnInit {
     const flightRoutes = {
       counter: [`/${this.authService.currentUserValue.role}/customer`, this.customerId, 'flights'],
       agent: [`/${this.authService.currentUserValue.role}/customer`, this.customerId, 'flights'],
-      customer: [`/flights`]
+      customer: [`/customer/flights`]
     }
     this.router.navigate(flightRoutes[this.authService.currentUserValue.role]);
   }
