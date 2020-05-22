@@ -1,11 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CustomerService } from '../_services/customer.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../_services/auth.service';
 import { Customer } from '../_models/customer';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { PlatformLocation } from '@angular/common';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-customer-search',
@@ -14,7 +12,7 @@ import { PlatformLocation } from '@angular/common';
 })
 export class CustomerSearchComponent implements OnInit {
 
-  private modalRef: NgbModalRef;
+  modalSubject: Subject<void> = new Subject<void>();
   customers: Customer[];
   customersCount: number;
   searchName = "";
@@ -23,26 +21,17 @@ export class CustomerSearchComponent implements OnInit {
   page = 1;
   pageSize = 10;
   loading = false;
-  createCustomerForm: FormGroup;
 
   constructor(
     private customerService: CustomerService,
     private authService: AuthService,
-    private router: Router,
-    private modalService: NgbModal,
-    private fb: FormBuilder,
-    private location: PlatformLocation
+    private router: Router
   ) {
 
   }
 
   ngOnInit(): void {
     this.getCustomers();
-    this.createCustomerForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(45)]],
-      address: ['', [Validators.required, Validators.minLength(15), Validators.maxLength(50)]],
-      phoneNumber: ['', [Validators.required, Validators.pattern('^\\([0-9]{3}\\) [0-9]{3}-[0-9]{4}$')]]
-    });
   }
 
   getCustomers() {
@@ -65,42 +54,16 @@ export class CustomerSearchComponent implements OnInit {
     );
   }
 
-  name() {
-    return this.createCustomerForm.get('name');
-  }
-
-  address() {
-    return this.createCustomerForm.get('address');
-  }
-
-  phoneNumber() {
-    return this.createCustomerForm.get('phoneNumber');
-  }
-
   getCustomerById(id: number) {
-
-      this.router.navigate([`${this.authService.currentUserValue.role}/customer`, id, 'tickets']);
-    }
+    this.router.navigate([`${this.authService.currentUserValue.role}/customer`, id, 'tickets']);
+  }
 
   changePage() {
     this.getCustomers();
   }
 
-  open(content: any) {
-    this.modalRef = this.modalService.open(content);
-    this.location.onPopState(() => this.modalRef.close());
-  }
-
-  addCustomer() {
-    this.customerService.addCustomer({
-      customerName: this.name().value,
-      customerAddress: this.address().value,
-      customerPhone: this.phoneNumber().value
-    }).subscribe(() => {
-      this.modalRef.close();
-      this.createCustomerForm.reset();
-      this.getCustomers();
-    });
+  openModal() {
+    this.modalSubject.next();
   }
 
 }
