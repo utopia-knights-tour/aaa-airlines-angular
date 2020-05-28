@@ -3,9 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { AuthService } from './auth.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class AgencyService {
 
   constructor(private http: HttpClient,
@@ -14,7 +12,7 @@ export class AgencyService {
   getAgencies() {
     return this.http.get(`${environment.apiUrl}/agent/agencies`);
   }
-  
+
   getAgencyById(id: number) {
     return this.http.get(`${environment.apiUrl}/${this.authService.currentUserValue.role}/agencies/${id}`);
   }
