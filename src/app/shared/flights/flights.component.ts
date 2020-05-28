@@ -24,8 +24,6 @@ export class FlightsComponent implements OnInit {
   currentDestination: Airport;
   currentFlightDate: string;
   role: string;
-  page = 1;
-  pageSize = 10;
   airportsLoading = false;
   flightsLoading = false;
 
@@ -135,8 +133,9 @@ export class FlightsComponent implements OnInit {
   }
 
   checkIfDateIsValid(c: AbstractControl) {
-    if (c.value && c.value.year && c.value.month && c.value.day) {
-      let departureDate = new Date(c.value.year, c.value.month - 1, c.value.day);
+    const date = c.value;
+    if (date && date.year && date.month && date.day) {
+      let departureDate = new Date(date.year, date.month - 1, date.day);
       let currentDate = new Date();
       currentDate.setHours(0, 0, 0, 0)
       if (departureDate >= currentDate) {
