@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-primary">
-  <a class="navbar-brand" [routerLink]="['customer','flights']" (click)="home()">
+  <a class="navbar-brand" [routerLink]="null" (click)="home()">
     <span class="fas fa-plane-departure"></span>
     Utopia Airlines
   </a>
@@ -21,7 +21,7 @@
   [ngClass]="{ 'show': navbarOpen }">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item" *ngIf="loggedIn()">
-        <a class="nav-link" [routerLink]="['customer','flights']" (click)="home()"
+        <a class="nav-link" [routerLink]="null" (click)="home()"
           >Home <span class="sr-only">(current)</span></a
         >
       </li>
