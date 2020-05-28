@@ -17,15 +17,13 @@ export class PaymentComponent implements OnInit {
   elements: Elements;
   card: StripeElement;
   stripeForm: FormGroup;
-  paymentInfo: any;
-  result: any;
+  result: string;
   flight: Flight;
   agencyId: number;
   customerId: number;
-  userCustomerId: any;
-  redirects: any;
+  userCustomerId: number;
   role: string;
-  flightId: any;
+  flightId: number;
   loading = false;
 
   constructor(
@@ -48,44 +46,32 @@ export class PaymentComponent implements OnInit {
     }
    ({ role: this.role, agencyId: this.agencyId } = this.authService.currentUserValue);
     this.flightService.getFlightById(this.flightId)
-    .subscribe((flight) => {
-      this.flight = flight;
-      if (this.authService.currentUserValue.role == 'customer') {
-        this.flight = {
-          ...flight,
-          departureDate: flight.departureDate.substring(0, flight.departureDate.indexOf('T00:')),
-        }
-      }
-      if (this.authService.currentUserValue.role == 'agent') {
-        this.flight = {
-          ...flight,
-          flightId: this.flightId,
-          departureDate: Object.values(flight.departureDate).reverse().join('-'),
-          sourceAirport: flight.sourceAirport['code'],
-          destinationAirport: flight.destinationAirport['code'],
-          departureTime:
-                ("0" + flight.departureTime['hour']).slice(-2) +
-                ":" +
-                ("0" + flight.departureTime['minute']).slice(-2) +
-                ":" +
-                ("0" + flight.departureTime['second']).slice(-2),
-              arrivalTime:
+      .subscribe((flight) => {
+        this.flight = flight
+        if (this.authService.currentUserValue.role == 'agent') {
+          this.flight = {
+            ...flight,
+            flightId: this.flightId,
+            departureDate: Object.values(flight.departureDate).join('-'),
+            sourceAirport: flight.sourceAirport['code'],
+            destinationAirport: flight.destinationAirport['code'],
+            departureTime:
+              ("0" + flight.departureTime['hour']).slice(-2) +
+              ":" +
+              ("0" + flight.departureTime['minute']).slice(-2) +
+              ":" +
+              ("0" + flight.departureTime['second']).slice(-2),
+            arrivalTime:
               ("0" + flight.arrivalTime['hour']).slice(-2) +
               ":" +
               ("0" + flight.arrivalTime['minute']).slice(-2) +
               ":" +
               ("0" + flight.arrivalTime['second']).slice(-2),
-
+          }
         }
-      }
-      this.paymentInfo = { ticketInfo: { flightId: this.flightId, customerId: (this.customerId || this.userCustomerId), agencyId: this.agencyId, amount: this.flight.cost * 100 }, paymentMethodId: null }
-    });
+      });
 
-    this.redirects = {
-      agent: ['/agent/customer', this.customerId, 'tickets'],
-      counter: ['/counter/customer', this.customerId, 'tickets'],
-      customer: ['/tickets']
-    }
+
 
     this.stripeService.elements()
       .subscribe(elements => {
@@ -113,7 +99,7 @@ export class PaymentComponent implements OnInit {
 
   pay() {
     this.loading = true;
-    const paymentInfo = this.paymentInfo;
+    const paymentInfo = { ticketInfo: { flightId: this.flightId, customerId: (this.customerId || this.userCustomerId), agencyId: this.agencyId, amount: Math.round(this.flight.cost * 100) }, paymentMethodId: null }
     this.stripeService
       .createPaymentMethod('card', this.card)
       .subscribe(result => {
@@ -139,6 +125,12 @@ export class PaymentComponent implements OnInit {
   }
 
   redirect() {
-    this.router.navigate(this.redirects[this.role])
+
+    const redirects = {
+      agent: ['/agent/customer', this.customerId, 'tickets'],
+      counter: ['/counter/customer', this.customerId, 'tickets'],
+      customer: ['/customer/tickets']
+    }
+    this.router.navigate(redirects[this.role])
   }
 }
