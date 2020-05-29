@@ -4,7 +4,7 @@
       <div class="card-block">
         <h5 class="card-title"> Flight #{{ flight.flightId }}</h5>
         <div class="card-text">
-          {{ flight.departureDate | date}} {{ flight.departureTime }}-{{ flight.arrivalTime }} UTC
+          {{ flight.departureDate | date}} {{ flight.departureTime | time}}-{{ flight.arrivalTime | time}} UTC
         </div>
         <div class="card-text">
           <p class="font-weight-bold d-inline h5">

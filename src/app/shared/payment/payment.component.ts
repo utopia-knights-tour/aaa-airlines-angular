@@ -44,7 +44,7 @@ export class PaymentComponent implements OnInit {
     if (!this.customerId) {
       this.userCustomerId = this.authService.currentUserValue.customer.customerId;
     }
-   ({ role: this.role, agencyId: this.agencyId } = this.authService.currentUserValue);
+    ({ role: this.role, agencyId: this.agencyId } = this.authService.currentUserValue);
     this.flightService.getFlightById(this.flightId)
       .subscribe((flight) => {
         this.flight = flight
@@ -55,18 +55,6 @@ export class PaymentComponent implements OnInit {
             departureDate: Object.values(flight.departureDate).join('-'),
             sourceAirport: flight.sourceAirport['code'],
             destinationAirport: flight.destinationAirport['code'],
-            departureTime:
-              ("0" + flight.departureTime['hour']).slice(-2) +
-              ":" +
-              ("0" + flight.departureTime['minute']).slice(-2) +
-              ":" +
-              ("0" + flight.departureTime['second']).slice(-2),
-            arrivalTime:
-              ("0" + flight.arrivalTime['hour']).slice(-2) +
-              ":" +
-              ("0" + flight.arrivalTime['minute']).slice(-2) +
-              ":" +
-              ("0" + flight.arrivalTime['second']).slice(-2),
           }
         }
       });
