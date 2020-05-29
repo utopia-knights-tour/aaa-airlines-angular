@@ -13,7 +13,5 @@ export class TimePipe implements PipeTransform {
       return `${time['hour'] < 10 ? "0" : ""}${time['hour']}:0${time['minute']}:0${time['second']}`
     }
     return time;
-
   }
-
 }
