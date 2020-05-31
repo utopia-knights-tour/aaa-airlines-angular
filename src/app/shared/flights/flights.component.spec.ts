@@ -193,7 +193,8 @@ describe('FlightsComponent', () => {
     component.ngOnInit();
     fixture.detectChanges();
     let airportOption = debugElem.query(By.css('select')).queryAll(By.css('option'))[1];
-    expect(airportOption.nativeElement.textContent).toEqual(` ${origin.airportCode} - ${origin.airportName} `);
+    let text = airportOption.nativeElement.textContent.trim();
+    expect(text).toEqual(`${origin.airportCode} - ${origin.airportName}`);
   });
 
   it('should render list of flights on form submission', () => {
