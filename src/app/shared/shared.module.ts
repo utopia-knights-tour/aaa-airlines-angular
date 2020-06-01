@@ -14,6 +14,7 @@ import { NgxStripeModule } from 'ngx-stripe';
 import { environment } from 'src/environments/environment';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TimePipe } from '../_pipes/time.pipe'
 
 // This module contains all shared declarables.
 @NgModule({
@@ -27,7 +28,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     SpinnerComponent,
     ButtonComponent,
     CustomerModalComponent,
-    CustomerComponent
+    CustomerComponent,
+    TimePipe
   ],
   imports: [
     CommonModule,
