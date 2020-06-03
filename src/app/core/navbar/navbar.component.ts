@@ -24,7 +24,7 @@ export class NavbarComponent implements OnInit {
     ) {
       switch (this.authService.currentUserValue.role) {
         case "customer":
-          route = ["/flights"];
+          route = ["/customer/flights"];
           break;
         case "counter":
           route = ["/counter"];

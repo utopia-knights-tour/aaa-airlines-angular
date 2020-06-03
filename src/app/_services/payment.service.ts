@@ -17,6 +17,10 @@ export class PaymentService {
 
 
   makePayment(paymentInformation) {
+    paymentInformation.ticketInfo = {
+      ...paymentInformation.ticketInfo,
+      amount: Math.round(paymentInformation.ticketInfo.amount)
+    }
     return this.http.post(
       `${environment.apiUrl}/payment`,
       paymentInformation,
