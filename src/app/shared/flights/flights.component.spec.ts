@@ -21,7 +21,7 @@ describe('FlightsComponent', () => {
 
     constructor(){}
 
-    public get currentUserValue() { return of({ role: "customer" }) }
+    get currentUserValue() { return of({ role: "customer" }) }
 
   }
 
@@ -32,17 +32,17 @@ describe('FlightsComponent', () => {
   let dateFormatter: NgbDateFormatterService;
   let fixture: ComponentFixture<FlightsComponent>;
   let debugElem: DebugElement;
-  let origin: Airport = {
+  const origin: Airport = {
     airportCode: 'LAX',
     airportName: 'Los Angeles International Airport',
     airportLocation: 'Los Angeles, California'
   };
-  let destination: Airport = {
+  const destination: Airport = {
     airportCode: 'BOS',
     airportName: 'Boston Logan International Airport',
     airportLocation: 'Boston, MA'
   };
-  let flight: Flight = {
+  const flight: Flight = {
     flightId: 1,
     cost: 200,
     arrivalDate: '2020-05-20',
@@ -88,7 +88,7 @@ describe('FlightsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should make a call for airportSerice on ngOnInit()', () => {
+  it('should make a call for airportService on ngOnInit()', () => {
     const mySpy = spyOn(airportService, 'getAirports').and.returnValue(of([]));
     component.ngOnInit();
     expect(mySpy).toHaveBeenCalledTimes(1);
@@ -154,17 +154,9 @@ describe('FlightsComponent', () => {
     expect(mySpy).toHaveBeenCalledTimes(1);
   });
 
-  it('should make a call to flightService on reloadFlights()', () => {
-    const mySpy = spyOn(flightService, 'getFlights').and.returnValue(of([]));
-    component.currentOrigin = origin;
-    component.currentDestination = destination;
-    component.currentFlightDate = '2020-05-22';
-    component.reloadFlights();
-    expect(mySpy).toHaveBeenCalledTimes(1);
-  });
 
   it('should have header "Choose a Flight"', () => {
-    let header = debugElem.query(By.css('h2'));
+    const header = debugElem.query(By.css('h2'));
     expect(header.nativeElement.textContent).toEqual("Choose a Flight");
   });
 
@@ -174,31 +166,31 @@ describe('FlightsComponent', () => {
     component.ngOnInit();
     // Need to run a change detection cycle to render displayed airports
     fixture.detectChanges();
-    let formControls = debugElem.queryAll(By.css('.form-control'));
+    const formControls = debugElem.queryAll(By.css('.form-control'));
     expect(formControls.length).toBe(3);
   });
 
   it('select elements should render list of airports returned from airportService', () => {
-    let airports: Airport[] = [ origin, destination ];
+    const airports: Airport[] = [ origin, destination ];
     spyOn(airportService, 'getAirports').and.returnValue(of(airports));
     component.ngOnInit();
     fixture.detectChanges();
-    let options = debugElem.query(By.css('select')).queryAll(By.css('option'));
+    const options = debugElem.query(By.css('select')).queryAll(By.css('option'));
     expect(options.length).toBe(3);
   });
 
   it('select option should be rendered with the correct text', () => {
-    let airports: Airport[] = [ origin ];
+    const airports: Airport[] = [ origin ];
     spyOn(airportService, 'getAirports').and.returnValue(of(airports));
     component.ngOnInit();
     fixture.detectChanges();
-    let airportOption = debugElem.query(By.css('select')).queryAll(By.css('option'))[1];
-    let text = airportOption.nativeElement.textContent.trim();
+    const airportOption = debugElem.query(By.css('select')).queryAll(By.css('option'))[1];
+    const text = airportOption.nativeElement.textContent.trim();
     expect(text).toEqual(`${origin.airportCode} - ${origin.airportName}`);
   });
 
   it('should render list of flights on form submission', () => {
-    let airports: Airport[] = [ origin, destination ];
+    const airports: Airport[] = [ origin, destination ];
     spyOn(airportService, 'getAirports').and.returnValue(of(airports));
     component.ngOnInit();
     fixture.detectChanges();
@@ -214,15 +206,15 @@ describe('FlightsComponent', () => {
     fixture.detectChanges();
     spyOn(flightService, 'getFlights').and.returnValue(of([flight]));
     spyOn(dateFormatter, 'format').and.returnValue('2025-05-22');
-    let form = debugElem.query(By.css('form'));
+    const form = debugElem.query(By.css('form'));
     form.triggerEventHandler('ngSubmit', {});
     fixture.detectChanges();
-    let flightCards = debugElem.queryAll(By.css('app-flight-card'));
+    const flightCards = debugElem.queryAll(By.css('app-flight-card'));
     expect(flightCards.length).toBeTruthy();
   });
 
   it('should render "No flights found." when flights list is empty', () => {
-    let airports: Airport[] = [];
+    const airports: Airport[] = [];
     spyOn(airportService, 'getAirports').and.returnValue(of(airports));
     component.ngOnInit();
     fixture.detectChanges();
@@ -238,10 +230,10 @@ describe('FlightsComponent', () => {
     fixture.detectChanges();
     spyOn(flightService, 'getFlights').and.returnValue(of([]));
     spyOn(dateFormatter, 'format').and.returnValue('2025-05-22');
-    let form = debugElem.query(By.css('form'));
+    const form = debugElem.query(By.css('form'));
     form.triggerEventHandler('ngSubmit', {});
     fixture.detectChanges();
-    let message = debugElem.query(By.css('#no-flights-msg'));
+    const message = debugElem.query(By.css('#no-flights-msg'));
     expect(message).toBeTruthy();
   });
 
