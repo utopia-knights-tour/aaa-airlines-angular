@@ -73,14 +73,14 @@ export class FlightsComponent implements OnInit {
     return this.flightForm.get('departureDate');
   }
 
-  getFlights() {
+  getFlights(reload?: Boolean) {
     this.flightsLoading = true;
     this.errorMessage = null;
-    const originCode = this.origin.value.airportCode;
-    const destinationCode = this.destination.value.airportCode;
-    const departureDate = this.dateFormatter.format(this.departureDate.value);
+    const originCode = reload? this.currentOrigin.airportCode: this.origin.value.airportCode;
+    const destinationCode = reload? this.currentDestination.airportCode: this.destination.value.airportCode;
+    const departureDate = reload? this.currentFlightDate: this.dateFormatter.format(this.departureDate.value);
     // Set up query params
-    let requestParams = [];
+    const requestParams = [];
     requestParams.push({ originCode });
     requestParams.push({ destinationCode });
     requestParams.push({ departureDate });
@@ -95,37 +95,16 @@ export class FlightsComponent implements OnInit {
         this.errorMessage = "Error loading flights."
       });
     // Variables used for user reloads.
-    this.currentOrigin = this.origin.value;
-    this.currentDestination = this.destination.value;
-    this.currentFlightDate = departureDate;
-  }
-
-  reloadFlights() {
-    this.flightsLoading = true;
-    this.errorMessage = null;
-    const originCode = this.currentOrigin.airportCode;
-    const destinationCode = this.currentDestination.airportCode;
-    const departureDate = this.currentFlightDate;
-    // Set up query params
-    let requestParams = [];
-    requestParams.push({ originCode });
-    requestParams.push({ destinationCode });
-    requestParams.push({ departureDate });
-    // Call to flights service to reload all the flights.
-    this.flightService.getFlights(requestParams)
-      .subscribe((flights: Flight[]) => {
-        this.flightsLoading = false;
-        this.flights = flights;
-      }, () => {
-        this.flightsLoading = false;
-        this.flights = null;
-        this.errorMessage = "Error reloading flights."
-      });
+    if (!reload) {
+      this.currentOrigin = this.origin.value;
+      this.currentDestination = this.destination.value;
+      this.currentFlightDate = departureDate;
+    }
   }
 
   checkIfAirportsNotEqual(c: AbstractControl) {
-    let origin = c.get("origin").value;
-    let destination = c.get("destination").value;
+    const origin = c.get("origin").value;
+    const destination = c.get("destination").value;
     if (!origin || !destination || origin != destination) {
       return null;
     }
@@ -135,8 +114,8 @@ export class FlightsComponent implements OnInit {
   checkIfDateIsValid(c: AbstractControl) {
     const date = c.value;
     if (date && date.year && date.month && date.day) {
-      let departureDate = new Date(date.year, date.month - 1, date.day);
-      let currentDate = new Date();
+      const departureDate = new Date(date.year, date.month - 1, date.day);
+      const currentDate = new Date();
       currentDate.setHours(0, 0, 0, 0)
       if (departureDate >= currentDate) {
         return null;

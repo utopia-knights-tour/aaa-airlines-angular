@@ -9,15 +9,15 @@
         <div class="card-text">
           {{ flight.departureDate | date}} {{ flight.departureTime | time}}-{{ flight.arrivalTime | time}} UTC
         </div>
-        <div class="card-text">
+        <div class="card-text" >
           <p class="font-weight-bold d-inline h5">
-            ${{ flight.cost }}
+          ${{ flight.cost }}
           </p>
           <button
           *ngIf="!purchaseMode"
           (click)="selectFlight(flight.flightId)"
           class="btn btn-m btn-primary float-right">
-            Select
+          Select
           </button>
         </div>
       </div>
