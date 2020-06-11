@@ -89,28 +89,31 @@ export class PaymentComponent implements OnInit {
     this.loading = true;
     const paymentInfo = { ticketInfo: { flightId: this.flightId, customerId: (this.customerId || this.userCustomerId), agencyId: this.agencyId, amount: Math.round(this.flight.cost * 100) }, paymentMethodId: null }
     this.stripeService
-      .createPaymentMethod('card', this.card)
-      .subscribe(result => {
-        const { paymentMethod } = result;
-        if (paymentMethod) {
-          paymentInfo.paymentMethodId = paymentMethod.id;
-          this.paymentService.makePayment(paymentInfo)
-            .subscribe(() => {
-              this.loading = false;
-              this.result = 'Payment successful.';
-              this.redirect();
-            }, err => {
-              this.loading = false;
-              console.log(err);
-              this.result = 'Payment failed.';
-            })
-        }
-      }, err => {
-        this.loading = false;
-        console.log(err);
-        this.result = 'Payment failed.';
-      });
-  }
+    .createPaymentMethod('card', this.card)
+    .subscribe(result => {
+      this.loading = false;
+      const { paymentMethod } = result;
+      if (!paymentMethod) {
+        this.result = 'Payment failed';
+      }
+      paymentInfo.paymentMethodId = paymentMethod.id;
+      this.loading = true;
+      this.paymentService.makePayment(paymentInfo)
+        .subscribe(() => {
+          this.loading = false;
+          this.result = 'Payment successful.';
+          this.redirect();
+        }, err => {
+          this.loading = false;
+          console.log(err);
+          this.result = 'Payment failed.';
+        })
+    }, err => {
+      this.loading = false;
+      console.log(err);
+      this.result = 'Payment failed.';
+    });
+}
 
   redirect() {
 
