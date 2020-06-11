@@ -4,7 +4,7 @@ import { FlightsComponent } from './flights.component';
 import { AirportService } from 'src/app/_services/airport.service';
 import { FlightService } from 'src/app/_services/flight.service';
 import { HttpClientModule } from '@angular/common/http';
-import { ReactiveFormsModule, FormBuilder, SelectControlValueAccessor } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, SelectControlValueAccessor, FormGroup } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AuthService } from 'src/app/_services/auth.service';
 import { of } from 'rxjs';
@@ -76,7 +76,6 @@ describe('FlightsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(FlightsComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
     airportService = TestBed.get(AirportService);
     flightService = TestBed.get(FlightService);
     formBuilder = TestBed.get(FormBuilder);
@@ -190,11 +189,12 @@ describe('FlightsComponent', () => {
   });
 
   it('should render list of flights on form submission', () => {
+    // arrange
     const airports: Airport[] = [ origin, destination ];
     spyOn(airportService, 'getAirports').and.returnValue(of(airports));
-    component.ngOnInit();
-    fixture.detectChanges();
-    component.flightForm = formBuilder.group({
+    spyOn(flightService, 'getFlights').and.returnValue(of([flight]));
+    spyOn(dateFormatter, 'format').and.returnValue('2025-05-22');
+    const flightForm: FormGroup = formBuilder.group({
       origin: 'LAX',
       destination: 'JFK',
       departureDate: {
@@ -203,13 +203,16 @@ describe('FlightsComponent', () => {
         day: 22
       }
     });
+    // act
+    component.ngOnInit();
     fixture.detectChanges();
-    spyOn(flightService, 'getFlights').and.returnValue(of([flight]));
-    spyOn(dateFormatter, 'format').and.returnValue('2025-05-22');
+    component.flightForm = flightForm;
+    fixture.detectChanges();
     const form = debugElem.query(By.css('form'));
     form.triggerEventHandler('ngSubmit', {});
     fixture.detectChanges();
     const flightCards = debugElem.queryAll(By.css('app-flight-card'));
+    // assert
     expect(flightCards.length).toBeTruthy();
   });
 
